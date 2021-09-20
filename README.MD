@@ -1,6 +1,6 @@
 ## BRENT-DECKER SOLVER
 
-### Numerical solver for finding function roots. An improved algorithm proposed by Zhengqiu Zhang with an experimental counterpart points evaluation procedure.
+### Numerical solver for finding function roots based on the improved algorithm proposed by Zhengqiu Zhang with new experimental counterpart points evaluation procedure.
 
 > AUTHOR: <b>PIOTR JAŻDŻYK</b> <br>
 > VERSION: 1.1.0 <br>
@@ -61,8 +61,8 @@ var result2a = solver.calcForFunction(func2);
 System.out.println("result2a= " + result2a); //Outputs -3.0
 ```
 It is important to understand what happened above. The solver outputs the first root it finds and only one.
-If the found root is not the one you have expected - you may need to adjust the scope in which desired solution can be found. 
-Let's try to adjust counterpart points to get the other root: */
+If the found root is not the one you have expected - you may need to adjust the scope in which the desired solution can be found.
+Let's try to adjust counterpart points to get the other root:
 ```
 solver.setCounterpartPoints(-1,2);              // We can expect that second root is between 2 and 1
 var result2b = solver.calcResult();             // Desired function is already set, so let's simply invoke calculation method.
@@ -73,11 +73,11 @@ Last example is to test if solver will manage to find root for a complex coupled
 var result3a = solver.calcForFunction(func3);
 System.out.println("result3a= " + result3a);
 ```
-If you run the code above, you will get an exception with information that NAN value was detected, what means that solution is not converged.
-Expected root for this function is a value of 80 000. The counterpart we last set are -1 and 2, which are several orders of magnitude
-smaller than any expected root. For such differences, automatic evaluation procedure will not manage to overcome it. Therefore,
-we need to change solution range scope to more appropriate threshold, for an example: 20 000 - 200 000. Instead of invoking
-a separate counterpart setter, you can use overloaded version of calcForFunction method:
+If you run the code above, you will get an exception with information that NAN value was detected, which means that solution is not converged.
+The expected root for this function is a value of 80 000. The counterpart we last set are -1 and 2, which are several orders of magnitude
+smaller than any expected root. For such differences, automatic evaluation procedures will not manage to overcome it. Therefore,
+we need to change the solution range scope to a more appropriate threshold, for example, 20 000 - 200 000. Instead of invoking
+a separate counterpart setter, you can use an overloaded version of calcForFunction method:
 ```
 var result3b = solver.calcForFunction(func3,20000,200000);
 System.out.println("result3b= " + result3b);    // Outputs: 79999.99999999991, with some small omittable numerical error
@@ -86,19 +86,19 @@ Even if the provided counterpart points are invalid as shown above - the automat
 few cycles of tries and error approach. This will work as long provided points are closed to the root and are of the similar order of magnitude.
 Is an extremely useful feature extending the usability of this solver. It may seem a bit of defensive approach, but my experience says that in many cases
 it will not be possible to automatically provide correct points each time.
-To see each step calculation you can turn on the diagnostic output. */
+To see each step calculation you can turn on the diagnostic output.
 ```
 solver.setShowDiagnostics(true);
 var result3c = solver.calcForFunction(func3,100000,200000);     // for these points f_a and f_b will not have an opposite signs
 System.out.println("\nresult3c=" + result3c); //Outputs: 79999.99999999991
 ```
-Despite tha fact that solution was not in the scope of provided counterpart points, solver still managed to converge.
-You can observe the diagnostic output and see that evaluation procedure algorithm was launched at the beginning and determined
-that second counterpart point needs to be changed to 74939.747 for solver to work. 
+Despite the fact that the solution was not in the scope of provided counterpart points, the solver still managed to converge.
+You can observe the diagnostic output and see that the evaluation procedure algorithm was launched at the beginning and determined
+that second counterpart point needs to be changed to 74939.747 for the solver to work.
 
 As it was demonstrated, this solver can handle almost any equation in a very few iterations steps and manages to
-provide a solution even if counterpart points are invalid (but still they need to be of proper order of magnitude).
-Evaluation procedure is not bulletproof, I am looking forward for any improvement proposals from the community. 
+provide a solution even if counterpart points are invalid (but still they need to be of the proper order of magnitude).
+The evaluation procedure is not bulletproof, I am looking forward to any improvement proposals from the community.
 
 ### REFERENCE SOURCE:
 * [1] BRENT-DECKER ITERATIVE SOLVER - MODIFIED ALGORITHM PROPOSED BY Zhengqiu Zhang / International Journal of Experimental Algorithms (IJEA), Volume (2) : Issue (1) : 2011

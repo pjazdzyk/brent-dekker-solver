@@ -38,6 +38,10 @@ public class Main {
         var result3c = solver.calcForFunction(func3,100000,200000);         // for these points f_a and f_b will not have an opposite signs
         System.out.println("\nresult3c=" + result3c); //Outputs: 79999.99999999991         // despite invalid points, solver managed to converge
 
+        // Quick instance example
+        var result = BrentSolver.ofFunction(x-> 2*x+10, -10,10);
+        System.out.println(result);
+
     }
 
 }

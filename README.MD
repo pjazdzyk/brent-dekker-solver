@@ -1,10 +1,13 @@
 ## BRENT-DECKER SOLVER
 
+---
+
 ### Numerical solver for finding function roots based on the improved algorithm proposed by Zhengqiu Zhang with new experimental counterpart points evaluation procedure.
 
 > AUTHOR: <b>PIOTR JAŻDŻYK</b> <br>
 > VERSION: 1.1.0 <br>
 > DATE: 2021.09.17<br>
+> LAST UPDATE: 2022.02.23<br>
 > EMAIL: jazdzyk@gmail.com <br>
 > LINKEDIN: https://www.linkedin.com/in/pjazdzyk/ <br>
 > COMPANY: SYNERSET | https://www.synerset.com | info@synerset.com
@@ -95,6 +98,12 @@ System.out.println("\nresult3c=" + result3c); //Outputs: 79999.99999999991
 Despite the fact that the solution was not in the scope of provided counterpart points, the solver still managed to converge.
 You can observe the diagnostic output and see that the evaluation procedure algorithm was launched at the beginning and determined
 that second counterpart point needs to be changed to 74939.747 for the solver to work.
+
+For single uce case, you can quickly use static method ofFunction() and get result immediately.
+```
+var result = BrentSolver.ofFunction(x->2*x+10,-10,10);
+System.out.println(result);
+```
 
 As it was demonstrated, this solver can handle almost any equation in a very few iterations steps and manages to
 provide a solution even if counterpart points are invalid (but still they need to be of the proper order of magnitude).

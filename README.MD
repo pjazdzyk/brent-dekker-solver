@@ -99,7 +99,7 @@ Despite the fact that the solution was not in the scope of provided counterpart 
 You can observe the diagnostic output and see that the evaluation procedure algorithm was launched at the beginning and determined
 that second counterpart point needs to be changed to 74939.747 for the solver to work.
 
-For single uce case, you can quickly use static method ofFunction() and get result immediately.
+For single result, you can quickly use static method ofFunction() and get result immediately.
 ```
 var result = BrentSolver.ofFunction(x->2*x+10,-10,10);
 System.out.println(result);

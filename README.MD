@@ -8,7 +8,6 @@
 > DATE: 2021.09.17<br>
 > LAST UPDATE: 2022.06.29<br>
 > AUTHOR: PIOTR JAŻDŻYK <br>
-> EMAIL: piotr.jazdzyk@o2.pl <br>
 > LINKEDIN: https://pl.linkedin.com/in/pjazdzyk/en <br>
 
 ### SHORT DESCRIPTION:

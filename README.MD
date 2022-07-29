@@ -4,13 +4,12 @@
 
 ### Numerical solver for finding function roots based on the improved algorithm proposed by Zhengqiu Zhang with new experimental counterpart points evaluation procedure.
 
-> AUTHOR: <b>PIOTR JAŻDŻYK</b> <br>
-> VERSION: 1.1.0 <br>
+> VERSION: 1.1.1 <br>
 > DATE: 2021.09.17<br>
-> LAST UPDATE: 2022.02.23<br>
-> EMAIL: jazdzyk@gmail.com <br>
-> LINKEDIN: https://www.linkedin.com/in/pjazdzyk/ <br>
-> COMPANY: SYNERSET | https://www.synerset.com | info@synerset.com
+> LAST UPDATE: 2022.06.29<br>
+> AUTHOR: PIOTR JAŻDŻYK <br>
+> EMAIL: piotr.jazdzyk@o2.pl <br>
+> LINKEDIN: https://pl.linkedin.com/in/pjazdzyk/en <br>
 
 ### SHORT DESCRIPTION:
 This is the single variable equation solver which allows finding roots for any type of function within a defined function argument range.
@@ -38,7 +37,7 @@ properly include the source and author in your references or documentation. For 
 3. Modifications, improvements or new ideas for counterpart point evaluation procedure.
 
 ### USER GUIDE:
-STEP 1: Brent-Decker Solver instance creation:<br>
+STEP 1: Brent-Decker solver instance creation:<br>
 ```BrentSolver solver = new BrentSolver();```
 
 STEP 2: Provide equation as double function. Equation must be in form ie: a*x+b = 0:<br>
@@ -57,7 +56,7 @@ Let's try the first function. Default counterpart points are +50 / -50, lets try
 var result1 = solver.calcForFunction(func1);
 System.out.println("result1= " + result1);   //Outputs -5.0 
 ```
-Solver outputs -5.0 what is the expected solution.<br>
+solver outputs -5.0 what is the expected solution.<br>
 Now the more difficult part, the quadratic function. This function has two roots: -3.0, 0.5. Lets he how solver will behave:
 ```
 var result2a = solver.calcForFunction(func2);

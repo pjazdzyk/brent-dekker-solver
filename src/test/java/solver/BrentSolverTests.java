@@ -1,4 +1,4 @@
-package Solver;
+package solver;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -53,6 +53,5 @@ public class BrentSolverTests {
                 Arguments.of(10000,20000)
         );
     }
-
 
 }

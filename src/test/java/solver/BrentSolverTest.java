@@ -9,7 +9,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.function.DoubleFunction;
 import java.util.stream.Stream;
 
-public class BrentSolverTests {
+public class BrentSolverTest {
 
     @Test
     public void simpleEquationTest(){

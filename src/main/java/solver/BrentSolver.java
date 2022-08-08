@@ -9,9 +9,13 @@ import java.util.function.DoubleFunction;
  * <h3>Algorithms (IJEA), Volume (2) : Issue (1) : 2011</h3>
  * <p>Single variable equation solver for finding roots for any type of function within defined argument range.
  * The algorithm uses a combination of following numerical schemes: Secant method, Bisection method and inverse quadratic interpolation to reduce calculation steps as much as possible.
- * Implemented improvements are based on a scientific paper published by Zhengqiu Zhang in 2011. </p><br>
+ * Implemented improvements are based on a scientific paper published by Zhengqiu Zhang in 2011. </p>
+ * <p>Variable name convention is intended to be as much similar as possible to the actual equations look&feel from math textbooks or in this case: scientific papers
+ * which was the reference source to construct this algorithm. Variables with zero (0) suffix stands for initial guess values. All variables starting with f_x are an output value from the user function
+ * in point "x". Variables "a" and "b" stands for already checked and adjusted values which are put into the root-finding algorithm. Values of "c" stores previous iteration result.
+ * Value of "s" stores the result of an applied interpolation algorithm. Root is found when function value in for the "b" point outputs 0 or is smaller than specified solver accuracy.</p>
+ * <br>
  * <p><span><b>AUTHOR: </span>Piotr Jażdżyk, MScEng</p>
- * <p>
  * <span><b>CONTACT: </span>
  * <a href="https://pl.linkedin.com/in/pjazdzyk/en">LinkedIn<a/> |
  * <a href="mailto:info@synerset.com">e-mail</a> |
@@ -23,69 +27,68 @@ import java.util.function.DoubleFunction;
 public class BrentSolver {
 
     // IDENTITY DATA
-    private final String name;                                  // Solver instance name
+    private final String id;
 
     // BRENT-DECKER SOLVER VARIABLE FIELDS
-    private double a0 = -50;                                    // initial guess or arbitrarily assumed values to get opposite (negative and positive) result from tested equation
-    private double b0 = 50;                                     // initial guess or arbitrarily assumed values to get opposite (negative and positive) result from tested equation
-    private double a, f_a;                                      // first point and f(a), must have opposite sign than b
-    private double b, f_b;                                      // second point and f(b), absolute value of b should be lower than a
-    private double c, f_c;                                      // previous iteration point and f(c), initially = a;
-    private double s, f_s;                                      // new approximate value based on secant method or bisection method,
-    private int counter;                                        // iteration counter
-    private double diff = Short.MAX_VALUE;                      // difference between a and b, to be checked against the target (initialized by default value)
-    private DoubleFunction<Double> func;                        // tested function
+    private double a0 = -50;                                    // initial guess or arbitrarily assumed value to get opposite (negative and positive) result from tested equation
+    private double b0 = 50;                                     // initial guess or arbitrarily assumed value to get opposite (negative and positive) result from tested equation
+    private double a, f_a;                                      // first point and its function value f(a), must have opposite sign than b
+    private double b, f_b;                                      // second point and its function value f(b), absolute value of b should be lower than a
+    private double c, f_c;                                      // previous iteration point and f(c), initially = a
+    private double s, f_s;                                      // new approximate value based on secant method or bisection method and f_s
+    private int counter;
+    private DoubleFunction<Double> func;                        // tested function, to be provided by user
 
     // BRENT-DECKER SOLVER SOLUTION CONTROL
-    private boolean runFlag = true;                             // condition check flag
-    private double maxIter = 100;                               // max iteration limit
-    private double accuracy = 0.00001;                          // required calculation accuracy level
+    private boolean runFlag = true;
+    private double iterationsLimit = 100;
+    private double accuracy = 0.00001;
 
-    // AB CONDITION EVALUATION PROCEDURE
-    private int evalCycles = 2;                                 // number of evaluation cycles
-    private int p2Coef = 2;                                     // second point division coefficient
-    private int p3Coef = 2;                                     // third point division coefficient
+    // INITIAL GUESS EVALUATION PROCEDURE CONTROL
+    private int evalCycles = 2;                                  // number of evaluation cycles
+    private int evalX2Divider = 2;                               // second point division coefficient
+    private int evalXDivider = 2;                                // third point division coefficient
 
     // DIAGNOSTICS OUTPUT CONTROL
-    private boolean showDiagnostics = false;                    // true = shows diagnostic output, false = no output
+    private boolean showDiagnostics = false;                     // true = shows diagnostic output, false = no output
 
     /**
-     * Constructor. Creates solver instance with function output set as 0, with default name.
+     * Initializes solver instance with function output set as 0, with default name.
      */
     public BrentSolver() {
         this("DefaultSolver");
     }
 
     /**
-     * Constructor. Creates solver instance with function output set as 0.
+     * Initializes solver instance with function output set as 0.
      */
-    public BrentSolver(String name) {
-        this.name = name;
+    public BrentSolver(String id) {
+        this.id = id;
         this.func = val -> 0.0;
     }
 
     /**
-     * Constructor. Creates solver instance with function output set as 0 and sets custom p2 and p3 coefficients.
+     * Initializes solver instance with function output set as 0 and sets custom p2 and p3 coefficients.
      * P2 and P3 coefficients are used to tune the counterpart point evaluation algorithm. Default values of p2=2, p3=2
      * works properly for a typical temperature range (-100,100). For pressures variable range, it is recommended to use p2=2, p3=0.
      * For other cases, if the use of point evaluation procedure is expected - p2 and p3 points have to be determined empirically.
      *
-     * @param p2Coef AB evaluation procedure second point coefficient
-     * @param p3Coef AB evaluation procedure third point coefficient
+     * @param evalX2Divider AB evaluation procedure second point coefficient
+     * @param evalXDivider AB evaluation procedure third point coefficient
      */
-    public BrentSolver(String name, int p2Coef, int p3Coef) {
-        this(name);
-        setP2Coef(p2Coef);
-        setP3Coef(p3Coef);
+    public BrentSolver(String id, int evalX2Divider, int evalXDivider) {
+        this(id);
+        setEvalX2Divider(evalX2Divider);
+        setEvalXDivider(evalXDivider);
     }
 
     /**
-     * Constructor. Creates solver instance with function provided by user.
+     * Initializes solver instance with function provided by user.
      *
      * @param func tested function (use lambda expression or method reference)
      */
-    public BrentSolver(String name, DoubleFunction<Double> func, int p2coef, int p3coef) {
-        this(name, p2coef, p3coef);
+    public BrentSolver(String id, DoubleFunction<Double> func, int evalX2Divider, int evalXDivider) {
+        this(id, evalX2Divider, evalXDivider);
         this.func = func;
     }
 
@@ -110,11 +113,11 @@ public class BrentSolver {
         //In case evaluation procedure will output b as a root
         if (Math.abs(f_b) < accuracy)
             return b;
-        //If at this stage proper AB condition is not achievable - an exception is thrown.
+        //If at this stage proper A-B condition is not achievable - an exception is thrown.
         if (initialABConditionIsNotMet())
-            throw new BrentSolverConditionException(name + ": EVALUATION PROCEDURE FAILED: f(a) i f(b) must have an opposite signs. Current values:"
+            throw new BrentSolverConditionException(id + ": EVALUATION PROCEDURE FAILED: f(a) i f(b) must have an opposite signs. Current values:"
                     + String.format(" a = %.3f, b = %.3f,  f(a)= %.3f, f(b)=%.3f", a, b, f_a, f_b));
-        printSolverDiagnostics("\n" + name + ": BEFORE RUN:\n", "\n");
+        printSolverDiagnostics("\n" + id + ": BEFORE RUN:\n", "\n");
 
         /*--------BEGINNING OF ITERATIVE LOOP--------*/
         while (runFlag) {
@@ -129,7 +132,8 @@ public class BrentSolver {
                 s = inverseQuadraticInterpolation(a, b, c, f_a, f_b, f_c);
             else
                 s = secantMethod(a, b, f_a, f_b);
-            diff = Math.abs(b - a);
+            // difference between a and b, to be checked against the target (initialized by default value)
+            double currentDifference = Math.abs(b - a);
             if (c > s) {
                 var tempC = c;
                 var tempS = s;
@@ -152,10 +156,10 @@ public class BrentSolver {
             f_b = func.apply(b);
 
             //Calculating current difference after this iteration cycle
-            printSolverDiagnostics(name + ": ITERATION: " + counter + " ", "Diff= " + diff);
-            if (diff < accuracy) {
+            printSolverDiagnostics(id + ": ITERATION: " + counter + " ", "Diff= " + currentDifference);
+            if (currentDifference < accuracy) {
                 runFlag = false;
-            } else if (counter > maxIter) {
+            } else if (counter > iterationsLimit) {
                 runFlag = false;
             } else if (f_b == 0) {
                 runFlag = false;
@@ -163,8 +167,11 @@ public class BrentSolver {
 
             //Exception will be thrown if NaN or Infinite values are detected
             checkForInfiniteOrNaN(f_a, f_b, f_c, f_s);
+
             /*-----------END OF ITERATIVE LOOP-----------*/
         }
+
+        // b is always closer to the root
         return b;
     }
 
@@ -189,39 +196,40 @@ public class BrentSolver {
     private void checkForInfiniteOrNaN(double... values) {
         for (double num : values) {
             if (Double.isInfinite(num))
-                throw new BrentSolverResultException(name + ": Solution error. Infinite number detected.");
+                throw new BrentSolverResultException(id + ": Solution error. Infinite number detected.");
             if (Double.isNaN(num))
-                throw new BrentSolverResultException(name + ": Solution error. NaN value detected.");
+                throw new BrentSolverResultException(id + ": Solution error. NaN value detected.");
         }
     }
 
     private void evaluateValidCondition() {
-        /*This method attempts to evaluate valid Brent Solver counterpart point condition
+        /*This method attempts to evaluate valid Brent Solver counterpart point condition.
         PROCEDURE EXPLANATION
         Using linear extrapolation to determine opposite sign of the "b" value.
         1. Linear extrapolations needs a pair of points: P1(x1,f_x1), P2(x2,f_x2) and f_y to determine x.
-        2. First point is already provided (b, f_b) and determined to be closer to the root
-        3. Second point P2 is created from b/P2_COEF and its function value.
-        4. f_x is an x value we expect to have an opposite sign to -b, and to make it closer to the root - it is divided by P3_COEF
-        5. In some cases initial values of P2_COEF and P3_COEF may be adjusted by user. For an example if your initial guess is very close to the root
-        you are looking for small P3_COEF values, like 2 or even 1. */
+        2. First point is already provided (b, f_b) and it is already evaluated to be closer to the root
+        3. Second point P2 is created from b/evalX2Divider and its function value.
+        4. f_x is an x value we expect to have an opposite sign to -b, and to make it closer to the root - it is divided by evalXDivider
+        5. In some cases initial values of evalX2Divider and evalXDivider may be adjusted by user. For an example if your initial guess is very close to the root
+        you are looking for small evalXDivider values, like 2 or even 1. */
 
-        printEvaluationDiagnostics(name + " EVALUATION PROCEDURE \nINITIAL:");
+        printEvaluationDiagnostics(id + " EVALUATION PROCEDURE \nINITIAL:");
         double x, f_x, x1, f_x1, x2, f_x2, f_xExact;
-        if (p3Coef > evalCycles)
-            evalCycles = p3Coef;
+        if (evalXDivider > evalCycles)
+            evalCycles = evalXDivider;
         for (int i = 0; i <= evalCycles; i++) {
-            if (p3Coef - i == 0.0)
+            if (evalXDivider - i == 0.0)
                 continue;
-            //Point 1
+            //Point 1, using b as a starting point
             x1 = b;
             f_x1 = f_b;
-            //Point 2
-            x2 = b / p2Coef;
+            //Point 2, creating second point from the b
+            x2 = b / evalX2Divider;
             f_x2 = func.apply(x2);
-            //Point 3:
-            f_x = -f_b / (p3Coef - i);
+            //Point 3, searching for a negative value of -f_b. Further division is to get result as close to the root as possible.
+            f_x = -f_b / (evalXDivider - i);
             x = linearExtrapolationFromValue(x1, f_x1, x2, f_x2, f_x);
+            // When x is determined - to check if it really gives negative value (it may not occur for strong non-linearity)
             f_xExact = func.apply(x);
             checkSetAndSwapABPoints(b, x);
             printEvaluationDiagnostics("STEP " + i + ":");
@@ -247,7 +255,7 @@ public class BrentSolver {
     }
 
     /**
-     * Resets solver flags ans iteration counter
+     * Resets solver flags and iteration counter
      */
     public final void resetSolverRunFlags() {
         this.runFlag = true;
@@ -267,8 +275,8 @@ public class BrentSolver {
      */
     public final void resetEvaluationCoefficients() {
         evalCycles = 5;
-        p2Coef = 2;
-        p3Coef = 10;
+        evalX2Divider = 2;
+        evalXDivider = 10;
     }
 
     /**
@@ -306,24 +314,6 @@ public class BrentSolver {
     }
 
     /**
-     * Returns Brent-Decker solver accuracy.
-     *
-     * @return accuracy level
-     */
-    public double getAccuracy() {
-        return accuracy;
-    }
-
-    /**
-     * Sets solver accuracy if other than default is required.
-     *
-     * @param accuracy solver accuracy
-     */
-    public final void setAccuracy(double accuracy) {
-        this.accuracy = Math.abs(accuracy);
-    }
-
-    /**
      * Sets diagnostic output mode. (true = show output, false = no output).
      *
      * @param showDiagnostics true = on, false = off
@@ -332,83 +322,7 @@ public class BrentSolver {
         this.showDiagnostics = showDiagnostics;
     }
 
-    /**
-     * Returns current iteration limit value.
-     *
-     * @return max iteration limit (int)
-     */
-    public double getMaxIter() {
-        return maxIter;
-    }
-
-    /**
-     * Sets maximum iteration limit
-     *
-     * @param maxIter maximum iteration limit
-     */
-    public void setMaxIter(double maxIter) {
-        this.maxIter = maxIter;
-    }
-
-    /**
-     * Returns current maximum AB point evaluation procedure cycles
-     *
-     * @return current maximum evaluation cycles
-     */
-    public int getEvalCycles() {
-        return evalCycles;
-    }
-
-    /**
-     * Sets maximum AB point evaluation procedure cycles
-     *
-     * @param evalCycles maximum evaluation cycles
-     */
-    public void setEvalCycles(int evalCycles) {
-        this.evalCycles = evalCycles;
-    }
-
-    /**
-     * Returns Second point division coefficient (AB evaluation procedure)
-     *
-     * @return second point div coefficient
-     */
-    public int getP2Coef() {
-        return p2Coef;
-    }
-
-    /**
-     * Sets second point division coefficient (AB evaluation procedure)
-     *
-     * @param P2_COEF second point div coefficient
-     */
-    public void setP2Coef(int P2_COEF) {
-        this.p2Coef = P2_COEF;
-    }
-
-    /**
-     * Returns second point division coefficient (AB evaluation procedure)
-     *
-     * @return third point div coefficient
-     */
-    public int getP3Coef() {
-        return p3Coef;
-    }
-
-    /**
-     * Sets third point division coefficient (AB evaluation procedure)
-     *
-     * @param p3Coef third point div coefficient
-     */
-    public void setP3Coef(int p3Coef) {
-        this.p3Coef = p3Coef;
-    }
-
-    public int getCounter() {
-        return counter;
-    }
-
-    // Interpolation methods
+    // INTERPOLATION ALGORITHMS
 
     /**
      * Linear extrapolation. Returns a function value f_x for provided argument of x, based on provided two points P1(x1,f_x1), P2(x2,f_x2).
@@ -452,7 +366,7 @@ public class BrentSolver {
         return x1 - f_x1 * (x1 - x2) / (f_x1 - f_x2);
     }
 
-    // Diagnostic outputs
+    // DIAGNOSTIC OUTPUT
     private void printEvaluationDiagnostics(String titleMsg) {
         if (showDiagnostics)
             System.out.println("\n" + titleMsg + " \t EVAL VALUES:" + String.format("a = %.3f, b = %.3f, f(a)= %.3f, f(b)=%.3f", a, b, f_a, f_b));
@@ -475,6 +389,102 @@ public class BrentSolver {
     public static double ofFunction(DoubleFunction<Double> func, double rangeA, double rangeB) {
         BrentSolver solver = new BrentSolver();
         return solver.calcForFunction(func, rangeA, rangeB);
+    }
+
+    // GETTERS & SETTERS
+
+    /**
+     * Returns Brent-Decker solver accuracy.
+     *
+     * @return accuracy level
+     */
+    public double getAccuracy() {
+        return accuracy;
+    }
+
+    /**
+     * Sets solver accuracy if other than default is required.
+     *
+     * @param accuracy solver accuracy
+     */
+    public final void setAccuracy(double accuracy) {
+        this.accuracy = Math.abs(accuracy);
+    }
+
+    /**
+     * Returns current iteration limit value.
+     *
+     * @return max iteration limit (int)
+     */
+    public double getIterationsLimit() {
+        return iterationsLimit;
+    }
+
+    /**
+     * Sets maximum iteration limit
+     *
+     * @param iterationsLimit maximum iteration limit
+     */
+    public void setIterationsLimit(double iterationsLimit) {
+        this.iterationsLimit = iterationsLimit;
+    }
+
+    /**
+     * Returns current maximum AB point evaluation procedure cycles
+     *
+     * @return current maximum evaluation cycles
+     */
+    public int getEvalCycles() {
+        return evalCycles;
+    }
+
+    /**
+     * Sets maximum AB point evaluation procedure cycles
+     *
+     * @param evalCycles maximum evaluation cycles
+     */
+    public void setEvalCycles(int evalCycles) {
+        this.evalCycles = evalCycles;
+    }
+
+    /**
+     * Returns Second point division coefficient (AB evaluation procedure)
+     *
+     * @return second point div coefficient
+     */
+    public int getEvalX2Divider() {
+        return evalX2Divider;
+    }
+
+    /**
+     * Sets second point division coefficient (AB evaluation procedure)
+     *
+     * @param evalX2Divider second point div coefficient
+     */
+    public void setEvalX2Divider(int evalX2Divider) {
+        this.evalX2Divider = evalX2Divider;
+    }
+
+    /**
+     * Returns second point division coefficient (AB evaluation procedure)
+     *
+     * @return third point div coefficient
+     */
+    public int getEvalXDivider() {
+        return evalXDivider;
+    }
+
+    /**
+     * Sets third point division coefficient (AB evaluation procedure)
+     *
+     * @param evalXDivider third point div coefficient
+     */
+    public void setEvalXDivider(int evalXDivider) {
+        this.evalXDivider = evalXDivider;
+    }
+
+    public int getCounter() {
+        return counter;
     }
 
 }

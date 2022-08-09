@@ -41,11 +41,11 @@ STEP 1: Brent-Decker solver instance creation:<br>
 
 STEP 2: Provide equation as double function. Equation must be in form ie: a*x+b = 0:<br>
 * I. Linear function: 2x + 10 = 0 <br>
-```DoubleFunction<Double> func1 = x -> 2*x + 10;```<br>
+```DoubleFunction<Double> linear = x -> 2*x + 10;```<br>
 * II. Quadratic function: 2x^2 +5x -3 = 0 <br>
-```DoubleFunction<Double> func2 = x -> 2*x*x + 5*x -3;```      
+```DoubleFunction<Double> quadratic = x -> 2*x*x + 5*x -3;```      
 * III. Complex function with nested argument under Logarithm <br>
-```DoubleFunction<Double> func3 = x -> 93.3519196629417 - (-237300 * Math.log(0.001638 * x) / (1000 * Math.log(0.001638 * x) - 17269));```  
+```DoubleFunction<Double> logNested = x -> 93.3519196629417 - (-237300 * Math.log(0.001638 * x) / (1000 * Math.log(0.001638 * x) - 17269));```  
 
 STEP 3: Provide counterpart points a and b, as a scope, between a solution is expected to be found. 
 Function value for that points must result in opposite signs. If this fails, solver is equipped with the weak evaluation procedure, 

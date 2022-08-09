@@ -12,11 +12,11 @@ import java.util.stream.Stream;
 public class BrentSolverTest {
 
     @Test
-    public void simpleEquationTest(){
+    public void simpleEquationTest() {
 
         // Arrange
         BrentSolver solver = new BrentSolver("Test-SOLVER");
-        DoubleFunction<Double> func = p -> (p+10)/20;
+        DoubleFunction<Double> func = p -> (p + 10) / 20;
         var expected = -10;
 
         // Act
@@ -29,7 +29,7 @@ public class BrentSolverTest {
 
     @ParameterizedTest
     @MethodSource("polyTestInlineData")
-    public void polynomialEquationTest(double a, double b){
+    public void polynomialEquationTest(double a, double b) {
 
         // Arrange
         BrentSolver solver = new BrentSolver("TEST-SOLVER");
@@ -37,20 +37,20 @@ public class BrentSolverTest {
         var expected = 80000;
 
         //Act
-        var actual = solver.calcForFunction(func,a,b);
+        var actual = solver.calcForFunction(func, a, b);
 
         //Assert
         Assertions.assertEquals(actual, expected, solver.getAccuracy());
 
     }
 
-    public static Stream<Arguments> polyTestInlineData(){
+    public static Stream<Arguments> polyTestInlineData() {
         return Stream.of(
-                Arguments.of(50000,120000),
-                Arguments.of(80000,200000),
-                Arguments.of(80000,80000),
-                Arguments.of(20000,80000),
-                Arguments.of(10000,20000)
+                Arguments.of(50000, 120000),
+                Arguments.of(80000, 200000),
+                Arguments.of(80000, 80000),
+                Arguments.of(20000, 80000),
+                Arguments.of(10000, 20000)
         );
     }
 

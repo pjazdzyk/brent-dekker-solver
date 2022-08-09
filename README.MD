@@ -6,7 +6,7 @@
 
 > VERSION: 1.1.1 <br>
 > DATE: 2021.09.17<br>
-> LAST UPDATE: 2022.06.29<br>
+> LAST UPDATE: 2022.07.09<br>
 > AUTHOR: PIOTR JAŻDŻYK <br>
 > LINKEDIN: https://pl.linkedin.com/in/pjazdzyk/en <br>
 
@@ -52,27 +52,27 @@ Function value for that points must result in opposite signs. If this fails, sol
 which will attempt to adjust your points to meet the criteria. If it does not succeed an exception is thrown.
 Let's try the first function. Default counterpart points are +50 / -50, lets try with these:
 ```
-var result1 = solver.calcForFunction(func1);
-System.out.println("result1= " + result1);   //Outputs -5.0 
+var resultLinear = solver.calcForFunction(linear);
+System.out.println("Linear function root = " + resultLinear);    //Outputs -5.0 
 ```
 solver outputs -5.0 what is the expected solution.<br>
 Now the more difficult part, the quadratic function. This function has two roots: -3.0, 0.5. Lets he how solver will behave:
 ```
-var result2a = solver.calcForFunction(func2);
-System.out.println("result2a= " + result2a); //Outputs -3.0
+var resultQuadratic1stRoot = solver.calcForFunction(quadratic);
+System.out.println("Quadratic function 1st root = " + resultQuadratic1stRoot);  //Outputs -3.0
 ```
 It is important to understand what happened above. The solver outputs the first root it finds and only one.
 If the found root is not the one you have expected - you may need to adjust the scope in which the desired solution can be found.
 Let's try to adjust counterpart points to get the other root:
 ```
-solver.setCounterpartPoints(-1,2);              // We can expect that second root is between 2 and 1
-var result2b = solver.calcResult();             // Desired function is already set, so let's simply invoke calculation method.
-System.out.println("result2b= " + result2b);    // Outputs 0.5, the second root
+solver.setCounterpartPoints(-1,2);                                              // We can expect that second root is between 2 and 1
+var resultQuadratic2ndRoot = solver.findRoot();                                 // Desired function is already set, so can simply invoke calculation method.
+System.out.println("Quadratic function 2nd root = " + resultQuadratic2ndRoot);  // Outputs 0.5, the second root
 ```
 Last example is to test if solver will manage to find root for a complex coupled argument, for an example inside a logarithm:
 ```
-var result3a = solver.calcForFunction(func3);
-System.out.println("result3a= " + result3a);
+var resultLogNested = solver.findRoot();
+System.out.println("Nested log function = " + resultLogNested);
 ```
 If you run the code above, you will get an exception with information that NAN value was detected, which means that solution is not converged.
 The expected root for this function is a value of 80 000. The counterpart we last set are -1 and 2, which are several orders of magnitude
@@ -80,8 +80,8 @@ smaller than any expected root. For such differences, automatic evaluation proce
 we need to change the solution range scope to a more appropriate threshold, for example, 20 000 - 200 000. Instead of invoking
 a separate counterpart setter, you can use an overloaded version of calcForFunction method:
 ```
-var result3b = solver.calcForFunction(func3,20000,200000);
-System.out.println("result3b= " + result3b);    // Outputs: 79999.99999999991, with some small omittable numerical error
+var resultLogNested = solver.calcForFunction(logNested,20000,200000);
+System.out.println("Nested log function root = " + resultLogNested);   // Outputs: 79999.99999999991, with some small numerical error
 ```
 Even if the provided counterpart points are invalid as shown above - the automatic evaluation algorithm will adjust them properly using linear extrapolation and
 few cycles of tries and error approach. This will work as long provided points are closed to the root and are of the similar order of magnitude.
@@ -89,9 +89,9 @@ Is an extremely useful feature extending the usability of this solver. It may se
 it will not be possible to automatically provide correct points each time.
 To see each step calculation you can turn on the diagnostic output.
 ```
-solver.setShowDiagnostics(true);
-var result3c = solver.calcForFunction(func3,100000,200000);     // for these points f_a and f_b will not have an opposite signs
-System.out.println("\nresult3c=" + result3c); //Outputs: 79999.99999999991
+solver.setShowDiagnostics(true);                                
+resultLogNested = solver.calcForFunction(logNested,100000,200000);        // for these points f_a and f_b will not have an opposite signs                        
+System.out.println("\nNested log function root = "  + resultLogNested);   // despite invalid points, AB evaluation algorithms works fine
 ```
 Despite the fact that the solution was not in the scope of provided counterpart points, the solver still managed to converge.
 You can observe the diagnostic output and see that the evaluation procedure algorithm was launched at the beginning and determined
@@ -99,8 +99,8 @@ that second counterpart point needs to be changed to 74939.747 for the solver to
 
 For single result, you can quickly use static method ofFunction() and get result immediately.
 ```
-var result = BrentSolver.ofFunction(x->2*x+10,-10,10);
-System.out.println(result);
+var functionRoot = BrentSolver.ofFunction(x-> 2*x+10, -10,10);
+System.out.println(functionRoot);                                          //Outputs: -5.0
 ```
 
 As it was demonstrated, this solver can handle almost any equation in a very few iterations steps and manages to

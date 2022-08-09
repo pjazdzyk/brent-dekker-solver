@@ -2,6 +2,7 @@ package solver;
 
 import SolverExceptions.BrentSolverConditionException;
 import SolverExceptions.BrentSolverResultException;
+
 import java.util.function.DoubleFunction;
 
 /**
@@ -29,7 +30,7 @@ public class BrentSolver {
     // IDENTITY DATA
     private final String id;
 
-    // BRENT-DECKER SOLVER VARIABLE FIELDS
+    // POINTS AND THEIR FUNCTION VALUES
     private double a0 = -50;                                    // initial guess or arbitrarily assumed value to get opposite (negative and positive) result from tested equation
     private double b0 = 50;                                     // initial guess or arbitrarily assumed value to get opposite (negative and positive) result from tested equation
     private double a, f_a;                                      // first point and its function value f(a), must have opposite sign than b
@@ -39,18 +40,18 @@ public class BrentSolver {
     private int counter;
     private DoubleFunction<Double> func;                        // tested function, to be provided by user
 
-    // BRENT-DECKER SOLVER SOLUTION CONTROL
+    // SOLVER SOLUTION CONTROL
     private boolean runFlag = true;
     private double iterationsLimit = 100;
     private double accuracy = 0.00001;
 
-    // INITIAL GUESS EVALUATION PROCEDURE CONTROL
-    private int evalCycles = 2;                                  // number of evaluation cycles
-    private int evalX2Divider = 2;                               // second point division coefficient
-    private int evalXDivider = 2;                                // third point division coefficient
+    // AB CONDITION EVAL ALGORITHM CONTROL
+    private int evalCycles = 2;
+    private int evalX2Divider = 2;
+    private int evalXDivider = 2;
 
     // DIAGNOSTICS OUTPUT CONTROL
-    private boolean showDiagnostics = false;                     // true = shows diagnostic output, false = no output
+    private boolean showDiagnostics = false;
 
     /**
      * Initializes solver instance with function output set as 0, with default name.
@@ -74,7 +75,7 @@ public class BrentSolver {
      * For other cases, if the use of point evaluation procedure is expected - p2 and p3 points have to be determined empirically.
      *
      * @param evalX2Divider AB evaluation procedure second point coefficient
-     * @param evalXDivider AB evaluation procedure third point coefficient
+     * @param evalXDivider  AB evaluation procedure third point coefficient
      */
     public BrentSolver(String id, int evalX2Divider, int evalXDivider) {
         this(id);
@@ -98,7 +99,7 @@ public class BrentSolver {
      *
      * @return root value
      */
-    public double calcResult() {
+    public final double findRoot() {
         //To check and set value b as being closer to the root
         checkSetAndSwapABPoints(a0, b0);
         //In case provided by user point "a" or "b" is actually a root
@@ -238,7 +239,7 @@ public class BrentSolver {
         }
     }
 
-    public void stopSolver() {
+    public final void stopSolver() {
         this.runFlag = false;
     }
 
@@ -297,7 +298,7 @@ public class BrentSolver {
      */
     public double calcForFunction(DoubleFunction<Double> func) {
         setFunction(func);
-        return calcResult();
+        return findRoot();
     }
 
     /**
@@ -378,10 +379,11 @@ public class BrentSolver {
     }
 
     // QUICK INSTANCE
+
     /**
      * Method for obtaining quick and single result for a provided function and expected result range.
      *
-     * @param func function provided eqn = 0 as an lambda expression: value -> f(value)
+     * @param func   function provided eqn = 0 as an lambda expression: value -> f(value)
      * @param rangeA first point of the result range
      * @param rangeB second point of the result range
      * @return calculated root
@@ -483,6 +485,11 @@ public class BrentSolver {
         this.evalXDivider = evalXDivider;
     }
 
+    /**
+     * Returns number of iterations.
+     *
+     * @return iteration count
+     */
     public int getCounter() {
         return counter;
     }

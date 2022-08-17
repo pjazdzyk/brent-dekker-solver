@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 public class BrentSolverTest {
 
     @Test
-    public void simpleEquationTest() {
+    public void calcForFunction_singleVariableFunction_returnsRoot() {
 
         // Arrange
         BrentSolver solver = new BrentSolver("Test-SOLVER");
@@ -29,7 +29,7 @@ public class BrentSolverTest {
 
     @ParameterizedTest
     @MethodSource("polyTestInlineData")
-    public void polynomialEquationTest(double a, double b) {
+    public void calcForFunction_polynomialFunction_returnRoot(double a, double b) {
 
         // Arrange
         BrentSolver solver = new BrentSolver("TEST-SOLVER");

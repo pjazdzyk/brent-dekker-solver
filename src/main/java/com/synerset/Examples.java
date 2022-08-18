@@ -4,7 +4,7 @@ import com.synerset.solver.BrentSolver;
 
 import java.util.function.DoubleFunction;
 
-public class Main {
+public class Examples {
 
     public static void main(String[] args) {
         runUserGuideExamples();

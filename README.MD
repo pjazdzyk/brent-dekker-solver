@@ -4,9 +4,7 @@
 
 ### Numerical solver for finding function roots based on the improved algorithm proposed by Zhengqiu Zhang with new experimental counterpart points evaluation procedure.
 
-> VERSION: 1.1.1 <br>
-> DATE: 2021.09.17<br>
-> LAST UPDATE: 2022.07.09<br>
+> VERSION: 1.0.2 <br>
 > AUTHOR: PIOTR JAŻDŻYK <br>
 > LINKEDIN: https://pl.linkedin.com/in/pjazdzyk/en <br>
 

@@ -11,6 +11,7 @@ import java.util.function.DoubleFunction;
  * <p>Single variable equation solver for finding roots for any type of function within defined argument range.
  * The algorithm uses a combination of following numerical schemes: Secant method, Bisection method and inverse quadratic interpolation to reduce calculation steps as much as possible.
  * Implemented improvements are based on a scientific paper published by Zhengqiu Zhang in 2011. </p>
+ * <p>User function must be rearranged to the form of <span><b>[expression = 0]<b/></span></p>.
  * <p>Variable name convention is intended to be as much similar as possible to the actual equations look&feel from math textbooks or in this case: scientific papers
  * which was the reference source to construct this algorithm. Variables with zero (0) suffix stands for initial guess values. All variables starting with f_x are an output value from the user function
  * in point "x". Variables "a" and "b" stands for already checked and adjusted values which are put into the root-finding algorithm. Values of "c" stores previous iteration result.
@@ -19,10 +20,7 @@ import java.util.function.DoubleFunction;
  * <p><span><b>AUTHOR: </span>Piotr Jażdżyk, MScEng</p>
  * <span><b>CONTACT: </span>
  * <a href="https://pl.linkedin.com/in/pjazdzyk/en">LinkedIn<a/> |
- * <a href="mailto:info@synerset.com">e-mail</a> |
- * <a href="http://synerset.com/">www.synerset.com</a>
- * </p>
- * <p><span><b>VERSION: </span> 1.1.1</p><br>
+ * <a href="http://synerset.com/">www.synerset.com</a><br>
  */
 
 public class BrentSolver {
@@ -38,7 +36,7 @@ public class BrentSolver {
     private double c, f_c;                                      // previous iteration point and f(c), initially = a
     private double s, f_s;                                      // new approximate value based on secant method or bisection method and f_s
     private int counter;
-    private DoubleFunction<Double> func;                        // tested function, to be provided by user
+    private DoubleFunction<Double> userFunction;                // tested function, to be provided by user
 
     // SOLVER SOLUTION CONTROL
     private boolean runFlag = true;
@@ -54,22 +52,22 @@ public class BrentSolver {
     private boolean showDiagnostics = false;
 
     /**
-     * Initializes com.synerset.solver instance with function output set as 0, with default name.
+     * Initializes solver instance with function output set as 0, with default name.
      */
     public BrentSolver() {
         this("DefaultSolver");
     }
 
     /**
-     * Initializes com.synerset.solver instance with function output set as 0.
+     * Initializes solver instance with function output set as 0.
      */
     public BrentSolver(String id) {
         this.id = id;
-        this.func = val -> 0.0;
+        this.userFunction = val -> 0.0;
     }
 
     /**
-     * Initializes com.synerset.solver instance with function output set as 0 and sets custom p2 and p3 coefficients.
+     * Initializes solver instance with function output set as 0 and sets custom p2 and p3 coefficients.
      * P2 and P3 coefficients are used to tune the counterpart point evaluation algorithm. Default values of p2=2, p3=2
      * works properly for a typical temperature range (-100,100). For pressures variable range, it is recommended to use p2=2, p3=0.
      * For other cases, if the use of point evaluation procedure is expected - p2 and p3 points have to be determined empirically.
@@ -84,20 +82,20 @@ public class BrentSolver {
     }
 
     /**
-     * Initializes com.synerset.solver instance with function provided by user.
+     * Initializes solver instance with function provided by user.
      *
-     * @param func tested function (use lambda expression or method reference)
+     * @param userFunction tested function (use lambda expression or method reference)
      */
-    public BrentSolver(String id, DoubleFunction<Double> func, int evalX2Divider, int evalXDivider) {
+    public BrentSolver(String id, DoubleFunction<Double> userFunction, int evalX2Divider, int evalXDivider) {
         this(id, evalX2Divider, evalXDivider);
-        this.func = func;
+        this.userFunction = userFunction;
     }
 
     /**
      * Returns root value based on Brent-Decker numerical scheme. Calculation procedure will use
-     * expressions provided in implemented <i>testedEquation()</i> method.
+     * expressions provided in userFunction.
      *
-     * @return root value
+     * @return actual root value
      */
     public final double findRoot() {
         //To check and set value b as being closer to the root
@@ -105,7 +103,7 @@ public class BrentSolver {
         //In case provided by user point "a" or "b" is actually a root
         if (Math.abs(f_b) < accuracy)
             return b;
-        //If com.synerset.solver were stopped
+        //If solver were stopped
         if (!runFlag)
             return b;
         //Checking if Brent AB condition is not met to launch automatic AB points evaluation procedure
@@ -126,7 +124,7 @@ public class BrentSolver {
 
             //New additional condition proposed by Zhengqiu Zhang
             c = (a + b) / 2;
-            f_c = func.apply(c);
+            f_c = userFunction.apply(c);
 
             //Determining better interpolation: inverse quadratic or else - secant method
             if ((f_a != f_c) && (f_b != f_c))
@@ -141,8 +139,8 @@ public class BrentSolver {
                 c = tempS;
                 s = tempC;
             }
-            f_c = func.apply(c);
-            f_s = func.apply(s);
+            f_c = userFunction.apply(c);
+            f_s = userFunction.apply(s);
             if (f_c * f_s < 0) {
                 a = s;
                 b = c;
@@ -153,8 +151,8 @@ public class BrentSolver {
                     b = s;
                 }
             }
-            f_a = func.apply(a);
-            f_b = func.apply(b);
+            f_a = userFunction.apply(a);
+            f_b = userFunction.apply(b);
 
             //Calculating current difference after this iteration cycle
             printSolverDiagnostics(id + ": ITERATION: " + counter + " ", "Diff= " + currentDifference);
@@ -181,13 +179,13 @@ public class BrentSolver {
     }
 
     private void checkSetAndSwapABPoints(double pointA, double pointB) {
-        f_a = func.apply(pointA);
-        f_b = func.apply(pointB);
+        f_a = userFunction.apply(pointA);
+        f_b = userFunction.apply(pointB);
         if (Math.abs(f_a) < Math.abs(f_b)) {
             a = pointB;
             b = pointA;
-            f_a = func.apply(a);
-            f_b = func.apply(b);
+            f_a = userFunction.apply(a);
+            f_b = userFunction.apply(b);
         } else {
             a = pointA;
             b = pointB;
@@ -226,12 +224,12 @@ public class BrentSolver {
             f_x1 = f_b;
             //Point 2, creating second point from the b
             x2 = b / evalX2Divider;
-            f_x2 = func.apply(x2);
+            f_x2 = userFunction.apply(x2);
             //Point 3, searching for a negative value of -f_b. Further division is to get result as close to the root as possible.
             f_x = -f_b / (evalXDivider - i);
             x = linearExtrapolationFromValue(x1, f_x1, x2, f_x2, f_x);
             // When x is determined - to check if it really gives negative value (it may not occur for strong non-linearity)
-            f_xExact = func.apply(x);
+            f_xExact = userFunction.apply(x);
             checkSetAndSwapABPoints(b, x);
             printEvaluationDiagnostics("STEP " + i + ":");
             if (f_xExact * f_x1 < 0)
@@ -286,7 +284,7 @@ public class BrentSolver {
      * @param func tested function (use lambda expression or method reference)
      */
     public void setFunction(DoubleFunction<Double> func) {
-        this.func = func;
+        this.userFunction = func;
         resetSolverRunFlags();
     }
 
@@ -375,7 +373,7 @@ public class BrentSolver {
 
     private void printSolverDiagnostics(String titleMsg, String endMsg) {
         if (showDiagnostics)
-            System.out.println(String.format(titleMsg + "s= %.5f, a= %.5f, f(a)= %.5f, b= %.5f, f(b)= %.5f, c= %.5f, f(c)= %.5f \t\t\t" + endMsg, s, a, f_a, b, f_b, c, f_c));
+            System.out.printf(titleMsg + "s= %.5f, a= %.5f, f(a)= %.5f, b= %.5f, f(b)= %.5f, c= %.5f, f(c)= %.5f \t\t\t" + endMsg + "%n", s, a, f_a, b, f_b, c, f_c);
     }
 
     // QUICK INSTANCE

@@ -30,7 +30,7 @@ public class Main {
 
         // Counterpart point significance:
 
-        // var resultLogNested = com.synerset.solver.findRoot();
+        // var resultLogNested = solver.findRoot();
         // System.out.println("Nested log function = " + resultLogNested);
 
         /* If you uncomment above, you will get an exception that NAN value was detected, what means that solution is not converged.

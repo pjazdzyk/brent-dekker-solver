@@ -1,4 +1,4 @@
-package SolverExceptions;
+package com.synerset.SolverExceptions;
 
 public class BrentSolverConditionException extends RuntimeException {
 

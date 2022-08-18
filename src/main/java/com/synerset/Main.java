@@ -1,4 +1,6 @@
-import solver.BrentSolver;
+package com.synerset;
+
+import com.synerset.solver.BrentSolver;
 
 import java.util.function.DoubleFunction;
 
@@ -28,7 +30,7 @@ public class Main {
 
         // Counterpart point significance:
 
-        // var resultLogNested = solver.findRoot();
+        // var resultLogNested = com.synerset.solver.findRoot();
         // System.out.println("Nested log function = " + resultLogNested);
 
         /* If you uncomment above, you will get an exception that NAN value was detected, what means that solution is not converged.

@@ -1,7 +1,7 @@
-package solver;
+package com.synerset.solver;
 
-import SolverExceptions.BrentSolverConditionException;
-import SolverExceptions.BrentSolverResultException;
+import com.synerset.SolverExceptions.BrentSolverConditionException;
+import com.synerset.SolverExceptions.BrentSolverResultException;
 
 import java.util.function.DoubleFunction;
 
@@ -54,14 +54,14 @@ public class BrentSolver {
     private boolean showDiagnostics = false;
 
     /**
-     * Initializes solver instance with function output set as 0, with default name.
+     * Initializes com.synerset.solver instance with function output set as 0, with default name.
      */
     public BrentSolver() {
         this("DefaultSolver");
     }
 
     /**
-     * Initializes solver instance with function output set as 0.
+     * Initializes com.synerset.solver instance with function output set as 0.
      */
     public BrentSolver(String id) {
         this.id = id;
@@ -69,7 +69,7 @@ public class BrentSolver {
     }
 
     /**
-     * Initializes solver instance with function output set as 0 and sets custom p2 and p3 coefficients.
+     * Initializes com.synerset.solver instance with function output set as 0 and sets custom p2 and p3 coefficients.
      * P2 and P3 coefficients are used to tune the counterpart point evaluation algorithm. Default values of p2=2, p3=2
      * works properly for a typical temperature range (-100,100). For pressures variable range, it is recommended to use p2=2, p3=0.
      * For other cases, if the use of point evaluation procedure is expected - p2 and p3 points have to be determined empirically.
@@ -84,7 +84,7 @@ public class BrentSolver {
     }
 
     /**
-     * Initializes solver instance with function provided by user.
+     * Initializes com.synerset.solver instance with function provided by user.
      *
      * @param func tested function (use lambda expression or method reference)
      */
@@ -105,7 +105,7 @@ public class BrentSolver {
         //In case provided by user point "a" or "b" is actually a root
         if (Math.abs(f_b) < accuracy)
             return b;
-        //If solver were stopped
+        //If com.synerset.solver were stopped
         if (!runFlag)
             return b;
         //Checking if Brent AB condition is not met to launch automatic AB points evaluation procedure
@@ -256,7 +256,7 @@ public class BrentSolver {
     }
 
     /**
-     * Resets solver flags and iteration counter
+     * Resets com.synerset.solver flags and iteration counter
      */
     public final void resetSolverRunFlags() {
         this.runFlag = true;
@@ -264,7 +264,7 @@ public class BrentSolver {
     }
 
     /**
-     * Resets solver counter part points to default values (+50,-50);
+     * Resets com.synerset.solver counter part points to default values (+50,-50);
      */
     public final void resetCounterPartPoints() {
         a0 = -50;
@@ -272,7 +272,7 @@ public class BrentSolver {
     }
 
     /**
-     * Resets solver evaluation procedure coefficients to default values.
+     * Resets com.synerset.solver evaluation procedure coefficients to default values.
      */
     public final void resetEvaluationCoefficients() {
         evalCycles = 5;
@@ -396,7 +396,7 @@ public class BrentSolver {
     // GETTERS & SETTERS
 
     /**
-     * Returns Brent-Decker solver accuracy.
+     * Returns Brent-Decker com.synerset.solver accuracy.
      *
      * @return accuracy level
      */
@@ -405,9 +405,9 @@ public class BrentSolver {
     }
 
     /**
-     * Sets solver accuracy if other than default is required.
+     * Sets com.synerset.solver accuracy if other than default is required.
      *
-     * @param accuracy solver accuracy
+     * @param accuracy com.synerset.solver accuracy
      */
     public final void setAccuracy(double accuracy) {
         this.accuracy = Math.abs(accuracy);

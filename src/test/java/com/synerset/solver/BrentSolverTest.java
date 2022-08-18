@@ -1,6 +1,7 @@
-package solver;
+package com.synerset.solver;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -12,6 +13,7 @@ import java.util.stream.Stream;
 public class BrentSolverTest {
 
     @Test
+    @DisplayName("Returns root for linear single variable function")
     public void calcForFunction_singleVariableFunction_returnsRoot() {
 
         // Arrange
@@ -29,6 +31,7 @@ public class BrentSolverTest {
 
     @ParameterizedTest
     @MethodSource("polyTestInlineData")
+    @DisplayName("Returns root for polynomial nested single variable function")
     public void calcForFunction_polynomialFunction_returnRoot(double a, double b) {
 
         // Arrange

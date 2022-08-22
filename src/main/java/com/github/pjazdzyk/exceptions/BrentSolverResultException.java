@@ -1,4 +1,4 @@
-package com.synerset.SolverExceptions;
+package com.github.pjazdzyk.exceptions;
 
 public class BrentSolverResultException extends RuntimeException {
 

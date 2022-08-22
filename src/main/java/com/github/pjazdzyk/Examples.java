@@ -1,6 +1,6 @@
-package com.synerset;
+package com.github.pjazdzyk;
 
-import com.synerset.solver.BrentSolver;
+import com.github.pjazdzyk.solver.BrentSolver;
 
 import java.util.function.DoubleFunction;
 

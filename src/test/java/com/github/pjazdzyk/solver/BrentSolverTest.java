@@ -1,4 +1,4 @@
-package com.synerset.solver;
+package com.github.pjazdzyk.solver;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

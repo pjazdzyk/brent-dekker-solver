@@ -4,13 +4,15 @@
 
 ### Numerical solver for finding function roots based on the improved algorithm proposed by Zhengqiu Zhang with new experimental counterpart points evaluation procedure.
 
-> VERSION: 1.0.2 <br>
+> VERSION: 1.1.0 <br>
 > AUTHOR: PIOTR JAŻDŻYK <br>
 > LINKEDIN: https://pl.linkedin.com/in/pjazdzyk/en <br>
 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.pjazdzyk/brent-decker-solver/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.pjazdzyk/brent-decker-solver)
+
 ### SHORT DESCRIPTION:
 
-A root-finding algorithm for finding roots of continuous and single-variable math functions, based on a modified version of the Brent-Decker algorithm.
+A math algorithm for finding roots of continuous and single-variable functions, based on a modified version of the Brent-Decker algorithm.
 This solver uses a combination of Secant and Bisection numerical schemes and inverse quadratic interpolation to reduce calculation time as much as possible. 
 The algorithm code is based on the paper published by Zhengqiu Zhang in 2011. The new procedure has lower complexity and provides faster convergence than a classical 
 Brent-Decker algorithm. 

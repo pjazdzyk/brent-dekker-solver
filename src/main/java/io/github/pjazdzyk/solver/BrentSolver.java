@@ -6,20 +6,21 @@ import io.github.pjazdzyk.exceptions.BrentSolverResultException;
 import java.util.function.DoubleFunction;
 
 /**
- * <h3>BRENT-DECKER ITERATIVE SOLVER - MODIFIED ALGORITHM PROPOSED BY Zhengqiu Zhang / International Journal of Experimental</h3>
- * <h3>Algorithms (IJEA), Volume (2) : Issue (1) : 2011</h3>
- * <p>Single variable equation solver for finding roots for any type of function within defined argument range.
+ * BRENT-DECKER ITERATIVE SOLVER - MODIFIED ALGORITHM PROPOSED BY Zhengqiu Zhang / International Journal of Experimental<br>
+ * Algorithms (IJEA), Volume (2) : Issue (1) : 2011
+ * <br>
+ * Single variable equation solver for finding roots for any type of function within defined argument range.
  * The algorithm uses a combination of following numerical schemes: Secant method, Bisection method and inverse quadratic interpolation to reduce calculation steps as much as possible.
- * Implemented improvements are based on a scientific paper published by Zhengqiu Zhang in 2011. </p>
- * <p>User function must be rearranged to the form of <span><b>[expression = 0]<b/></span></p>.
- * <p>Variable name convention is intended to be as much similar as possible to the actual equations look&feel from math textbooks or in this case: scientific papers
+ * Implemented improvements are based on a scientific paper published by Zhengqiu Zhang in 2011.
+ * User function must be rearranged to the form of [expression = 0].
+ * Variable name convention is intended to be as much similar as possible to the actual equations from math textbooks or in this case scientific papers
  * which was the reference source to construct this algorithm. Variables with zero (0) suffix stands for initial guess values. All variables starting with f_x are an output value from the user function
  * in point "x". Variables "a" and "b" stands for already checked and adjusted values which are put into the root-finding algorithm. Values of "c" stores previous iteration result.
- * Value of "s" stores the result of an applied interpolation algorithm. Root is found when function value in for the "b" point outputs 0 or is smaller than specified solver accuracy.</p>
+ * Value of "s" stores the result of an applied interpolation algorithm. Root is found when function value in for the "b" point outputs 0 or is smaller than specified solver accuracy.
  * <br>
- * <p><span><b>AUTHOR: </span>Piotr Jażdżyk, MScEng</p>
- * <span><b>CONTACT: </span>
- * <a href="https://pl.linkedin.com/in/pjazdzyk/en">LinkedIn<a/> |
+ * <p>AUTHOR: Piotr Jażdżyk, MScEng</p>
+ * CONTACT:
+ * <a href="https://pl.linkedin.com/in/pjazdzyk/en">LinkedIn</a> |
  * <a href="http://synerset.com/">www.synerset.com</a><br>
  */
 
@@ -227,7 +228,7 @@ public class BrentSolver {
             f_x2 = userFunction.apply(x2);
             //Point 3, searching for a negative value of -f_b. Further division is to get result as close to the root as possible.
             f_x = -f_b / (evalXDivider - i);
-            x = linearExtrapolationFromValue(x1, f_x1, x2, f_x2, f_x);
+            x = linearInterpolationFromValue(x1, f_x1, x2, f_x2, f_x);
             // When x is determined - to check if it really gives negative value (it may not occur for strong non-linearity)
             f_xExact = userFunction.apply(x);
             checkSetAndSwapABPoints(b, x);
@@ -324,22 +325,30 @@ public class BrentSolver {
     // INTERPOLATION ALGORITHMS
 
     /**
-     * Linear extrapolation. Returns a function value f_x for provided argument of x, based on provided two points P1(x1,f_x1), P2(x2,f_x2).
+     * Linear interpolation/extrapolation. Returns a function value f_x for provided argument of x, based on provided two points P1(x1,f_x1), P2(x2,f_x2).
      * Can be used for interpolation or extrapolation for linear functions.
-     *
-     * @return f_x as value of function for argument x.
+     * @param x1 first point x value
+     * @param f_x1 function value in x1
+     * @param x2 second point x value
+     * @param f_x2 function value in x2
+     * @param x external point x value
+     * @return f_x value of function for argument x.
      */
-    public static double linearExtrapolation(double x1, double f_x1, double x2, double f_x2, double x) {
+    public static double linearInterpolation(double x1, double f_x1, double x2, double f_x2, double x) {
         return f_x1 + ((x - x1) / (x2 - x1)) * (f_x2 - f_x1);
     }
 
     /**
-     * Linear extrapolation. Returns a function argument x for provided argument value f_x, based on provided two points P1(x1,f_x1), P2(x2,f_x2).
+     * Linear interpolation/extrapolation. Returns a function argument x for provided argument value f_x, based on provided two points P1(x1,f_x1), P2(x2,f_x2).
      * Can be used for interpolation or extrapolation for linear functions.
-     *
-     * @return x as argument for f_x value.
+     * @param x1 first point x value
+     * @param f_x1 function value in x1
+     * @param x2 second point x value
+     * @param f_x2 function value in x2
+     * @param f_x function value for external point x
+     * @return x external point x value
      */
-    public static double linearExtrapolationFromValue(double x1, double f_x1, double x2, double f_x2, double f_x) {
+    public static double linearInterpolationFromValue(double x1, double f_x1, double x2, double f_x2, double f_x) {
         return ((x1 - x2) / (f_x1 - f_x2)) * (f_x - f_x1 + x1 * (f_x1 - f_x2) / (x1 - x2));
     }
 
@@ -347,7 +356,12 @@ public class BrentSolver {
      * Inverse quadratic interpolation. Returns a function argument x for f_x = 0.0, based on three provided points P2(x2,f_x2), P1(x1,f_x1), PN(xn,f_xn)
      * It attempts to fit y-based parabola to intersect with axis X as potential function root. It is faster than secant method but more sensitive to initial guesses.
      * It should be used for points very close to the root.
-     *
+     * @param x2 second point x value
+     * @param x1 first point x value
+     * @param xn any other point x value
+     * @param f_x2 function value in x2
+     * @param f_x1 function value in x1
+     * @param f_xn function value in xn
      * @return estimated function root x as argument for f_x = 0.
      */
     public static double inverseQuadraticInterpolation(double x2, double x1, double xn, double f_x2, double f_x1, double f_xn) {
@@ -357,9 +371,12 @@ public class BrentSolver {
     }
 
     /**
-     * Secant method. Returns a function argument x for f_x = 0.0, based on two points P2(x2,f_x2), P1(x1,f_x1).
-     *
-     * @return estimated function root x as argument for f_x = 0.
+     * Secant method. Returns a function value for X-axis secant intersection between points P1(x1,f_x1) and P2(x2,f_x2).
+     * @param x2 second point x value
+     * @param x1 first point x value
+     * @param f_x2 function value in x2
+     * @param f_x1 function value in x1
+     * @return intersection point for f_x=0
      */
     public static double secantMethod(double x2, double x1, double f_x2, double f_x1) {
         return x1 - f_x1 * (x1 - x2) / (f_x1 - f_x2);
@@ -381,9 +398,9 @@ public class BrentSolver {
     /**
      * Method for obtaining quick and single result for a provided function and expected result range.
      *
-     * @param func   function provided eqn = 0 as an lambda expression: value -> f(value)
-     * @param rangeA first point of the result range
-     * @param rangeB second point of the result range
+     * @param func provided eqn = 0 as an lambda expression: value -> f(value)
+     * @param rangeA first point of the expected result range
+     * @param rangeB second point of the expected result range
      * @return calculated root
      */
     public static double ofFunction(DoubleFunction<Double> func, double rangeA, double rangeB) {
@@ -475,7 +492,7 @@ public class BrentSolver {
     }
 
     /**
-     * Sets third point division coefficient (AB evaluation procedure)
+     * Sets third point division coefficient (AB evaluation procedure calibration)
      *
      * @param evalXDivider third point div coefficient
      */

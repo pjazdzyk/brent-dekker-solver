@@ -25,7 +25,7 @@
     <version>1.1.0</version>
 
     <name>Brent Decker Solver</name>
-    <description>A root-finding algorithm for finding roots of continuous and single-variable math functions,
+    <description>The algorithm for finding roots of continuous and single-variable math functions,
         based on a modified version of the Brent-Decker algorithm.</description>
     <url>https://github.com/pjazdzyk/brent-decker-solver</url>
 

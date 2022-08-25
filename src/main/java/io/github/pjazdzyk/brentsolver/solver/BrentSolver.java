@@ -1,7 +1,7 @@
-package io.github.pjazdzyk.solver;
+package io.github.pjazdzyk.brentsolver.solver;
 
-import io.github.pjazdzyk.exceptions.BrentSolverConditionException;
-import io.github.pjazdzyk.exceptions.BrentSolverResultException;
+import io.github.pjazdzyk.brentsolver.exceptions.BrentSolverConditionException;
+import io.github.pjazdzyk.brentsolver.exceptions.BrentSolverResultException;
 
 import java.util.function.DoubleFunction;
 

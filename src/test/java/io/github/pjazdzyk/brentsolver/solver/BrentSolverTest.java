@@ -1,4 +1,4 @@
-package io.github.pjazdzyk.solver;
+package io.github.pjazdzyk.brentsolver.solver;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

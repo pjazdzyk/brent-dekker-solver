@@ -1,6 +1,6 @@
-package io.github.pjazdzyk;
+package io.github.pjazdzyk.brentsolver;
 
-import io.github.pjazdzyk.solver.BrentSolver;
+import io.github.pjazdzyk.brentsolver.solver.BrentSolver;
 
 import java.util.function.DoubleFunction;
 

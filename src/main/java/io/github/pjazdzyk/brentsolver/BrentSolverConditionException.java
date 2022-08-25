@@ -1,4 +1,4 @@
-package io.github.pjazdzyk.brentsolver.exceptions;
+package io.github.pjazdzyk.brentsolver;
 
 public class BrentSolverConditionException extends RuntimeException {
 

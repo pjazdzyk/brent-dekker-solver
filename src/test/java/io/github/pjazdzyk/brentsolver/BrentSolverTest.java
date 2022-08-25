@@ -1,5 +1,6 @@
-package io.github.pjazdzyk.brentsolver.solver;
+package io.github.pjazdzyk.brentsolver;
 
+import io.github.pjazdzyk.brentsolver.BrentSolver;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

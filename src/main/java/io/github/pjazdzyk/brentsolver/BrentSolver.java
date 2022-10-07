@@ -3,7 +3,7 @@ package io.github.pjazdzyk.brentsolver;
 import java.util.function.DoubleFunction;
 
 /**
- * BRENT-DECKER ITERATIVE SOLVER - MODIFIED ALGORITHM PROPOSED BY Zhengqiu Zhang / International Journal of Experimental<br>
+ * BRENT-DEKKER ITERATIVE SOLVER - MODIFIED ALGORITHM PROPOSED BY Zhengqiu Zhang / International Journal of Experimental<br>
  * Algorithms (IJEA), Volume (2) : Issue (1) : 2011
  * <br>
  * Single variable equation solver for finding roots for any type of function within defined argument range.
@@ -17,7 +17,7 @@ import java.util.function.DoubleFunction;
  * <br>
  * <p>AUTHOR: Piotr Jażdżyk, MScEng</p>
  * CONTACT:
- * <a href="https://pl.linkedin.com/in/pjazdzyk/en">LinkedIn</a> |
+ * <a href="https://www.linkedin.com/in/pjazdzyk">LinkedIn</a> |
  * <a href="http://synerset.com/">www.synerset.com</a><br>
  */
 
@@ -90,7 +90,7 @@ public class BrentSolver {
     }
 
     /**
-     * Returns root value based on Brent-Decker numerical scheme. Calculation procedure will use
+     * Returns root value based on Brent-Dekker numerical scheme. Calculation procedure will use
      * expressions provided in userFunction.
      *
      * @return actual root value
@@ -112,7 +112,7 @@ public class BrentSolver {
             return b;
         //If at this stage proper A-B condition is not achievable - an exception is thrown.
         if (initialABConditionIsNotMet())
-            throw new BrentSolverConditionException(id + ": EVALUATION PROCEDURE FAILED: f(a) i f(b) must have an opposite signs. Current values:"
+            throw new BrentSolverException(id + ": EVALUATION PROCEDURE FAILED: f(a) i f(b) must have an opposite signs. Current values:"
                     + String.format(" a = %.3f, b = %.3f,  f(a)= %.3f, f(b)=%.3f", a, b, f_a, f_b));
         printSolverDiagnostics("\n" + id + ": BEFORE RUN:\n", "\n");
 
@@ -193,9 +193,9 @@ public class BrentSolver {
     private void checkForInfiniteOrNaN(double... values) {
         for (double num : values) {
             if (Double.isInfinite(num))
-                throw new BrentSolverResultException(id + ": Solution error. Infinite number detected.");
+                throw new BrentSolverException(id + ": Solution error. Infinite number detected.");
             if (Double.isNaN(num))
-                throw new BrentSolverResultException(id + ": Solution error. NaN value detected.");
+                throw new BrentSolverException(id + ": Solution error. NaN value detected.");
         }
     }
 
@@ -240,7 +240,7 @@ public class BrentSolver {
     }
 
     /**
-     * Sets custom initial counterpart points for Brent-Decker method condition.
+     * Sets custom initial counterpart points for Brent-Dekker method condition.
      *
      * @param pointA - first initial counterpart point
      * @param pointB - second initial counterpart point
@@ -252,7 +252,7 @@ public class BrentSolver {
     }
 
     /**
-     * Resets com.synerset.solver flags and iteration counter
+     * Resets flags and iteration counter
      */
     public final void resetSolverRunFlags() {
         this.runFlag = true;
@@ -260,7 +260,7 @@ public class BrentSolver {
     }
 
     /**
-     * Resets com.synerset.solver counter part points to default values (+50,-50);
+     * Resets counter part points to default values (+50,-50);
      */
     public final void resetCounterPartPoints() {
         a0 = -50;
@@ -268,7 +268,7 @@ public class BrentSolver {
     }
 
     /**
-     * Resets com.synerset.solver evaluation procedure coefficients to default values.
+     * Resets evaluation procedure coefficients to default values.
      */
     public final void resetEvaluationCoefficients() {
         evalCycles = 5;
@@ -408,7 +408,7 @@ public class BrentSolver {
     // GETTERS & SETTERS
 
     /**
-     * Returns Brent-Decker com.synerset.solver accuracy.
+     * Returns Brent-Dekker accuracy.
      *
      * @return accuracy level
      */
@@ -417,9 +417,9 @@ public class BrentSolver {
     }
 
     /**
-     * Sets com.synerset.solver accuracy if other than default is required.
+     * Sets accuracy if other than default is required.
      *
-     * @param accuracy com.synerset.solver accuracy
+     * @param accuracy accuracy
      */
     public final void setAccuracy(double accuracy) {
         this.accuracy = Math.abs(accuracy);

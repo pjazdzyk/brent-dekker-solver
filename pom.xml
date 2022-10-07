@@ -8,26 +8,26 @@
         <maven.compiler.source>16</maven.compiler.source>
         <maven.compiler.target>16</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <junit.version>5.9.0</junit.version>
     </properties>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
-            <version>5.9.0</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
 
     <groupId>io.github.pjazdzyk</groupId>
     <artifactId>brent-decker-solver</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 
-    <name>Brent Decker Solver</name>
+    <name>Brent Dekker Solver</name>
     <description>The algorithm for finding roots of continuous and single-variable math functions,
         based on a modified version of the Brent-Decker algorithm.</description>
-    <url>https://github.com/pjazdzyk/brent-decker-solver</url>
+    <url>https://github.com/pjazdzyk/brent-dekker-solver</url>
 
     <licenses>
         <license>
@@ -41,14 +41,14 @@
             <name>Piotr Jażdżyk</name>
             <email>piotr.jazdzyk@o2.pl</email>
             <organization>SYNERSET</organization>
-            <organizationUrl>http://www.synerset.com</organizationUrl>
+            <organizationUrl>https://www.synerset.com</organizationUrl>
         </developer>
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/pjazdzyk/brent-decker-solver.git</connection>
-        <developerConnection>scm:git:ssh://github.com:pjazdzyk/brent-decker-solver.git</developerConnection>
-        <url>https://github.com/pjazdzyk/brent-decker-solver</url>
+        <connection>scm:git:git://github.com/pjazdzyk/brent-dekker-solver.git</connection>
+        <developerConnection>scm:git:ssh://github.com:pjazdzyk/brent-dekker-solver.git</developerConnection>
+        <url>https://github.com/pjazdzyk/brent-dekker-solver</url>
     </scm>
 
     <distributionManagement>
@@ -92,8 +92,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-gpg-plugin -->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

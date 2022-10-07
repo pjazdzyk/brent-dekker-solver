@@ -1,9 +1,6 @@
 package io.github.pjazdzyk.brentsolver;
 
-import io.github.pjazdzyk.brentsolver.BrentSolver;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -11,44 +8,67 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.function.DoubleFunction;
 import java.util.stream.Stream;
 
-public class BrentSolverTest {
+class BrentSolverTest {
+
+    private double solver_accuracy;
+    private BrentSolver solver;
+
+    @BeforeEach
+    void setUp() {
+        this.solver = new BrentSolver("Test-SOLVER");
+        this.solver_accuracy = solver.getAccuracy();
+    }
 
     @Test
-    @DisplayName("Returns root for linear single variable function")
-    public void calcForFunction_singleVariableFunction_returnsRoot() {
-
+    @DisplayName("should return root for simple linear function")
+    void findRoot_givenSingleVariableFunction_returnsRoot() {
         // Arrange
-        BrentSolver solver = new BrentSolver("Test-SOLVER");
         DoubleFunction<Double> func = p -> (p + 10) / 20;
-        var expected = -10;
+        var expectedRoot = -10;
 
         // Act
-        var result = solver.calcForFunction(func);
+        var actualRoot = solver.calcForFunction(func);
 
         // Assert
-        Assertions.assertEquals(expected, result, solver.getAccuracy());
+        Assertions.assertEquals(expectedRoot, actualRoot, solver_accuracy);
+    }
 
+    @Test
+    @DisplayName("should return one of two roots within specified solution boundary")
+    void findRoot_givenQuadraticFunction_returnRoot() {
+        // Arrange
+        DoubleFunction<Double> quadraticFunction = x -> 2 * x * x + 5 * x - 3;
+        var expectedFirstRoot = -3;
+        var expectedSecondRoot = 0.5;
+
+        // Act
+        var actualFirstRoot = solver.calcForFunction(quadraticFunction);
+        solver.setCounterpartPoints(-1, 2);
+        var actualSecondRoot = solver.calcForFunction(quadraticFunction);
+
+        // Assert
+        Assertions.assertEquals(expectedFirstRoot, actualFirstRoot, solver_accuracy);
+        Assertions.assertEquals(expectedSecondRoot, actualSecondRoot, solver_accuracy);
     }
 
     @ParameterizedTest
     @MethodSource("polyTestInlineData")
-    @DisplayName("Returns root for polynomial nested single variable function")
-    public void calcForFunction_polynomialFunction_returnRoot(double a, double b) {
-
+    @DisplayName("should return root for nested log function for series of counterpart points which brakes brent-decker counterpart points condition")
+    void findRoot_givenPolynomialFunction_returnRoot(double pointA, double pointB) {
         // Arrange
-        BrentSolver solver = new BrentSolver("TEST-SOLVER");
         DoubleFunction<Double> func = p -> 93.3519196629417 - (-237300 * Math.log(0.001638 * p) / (1000 * Math.log(0.001638 * p) - 17269));
-        var expected = 80000;
+        var expectedRoot = 80000;
 
         //Act
-        var actual = solver.calcForFunction(func, a, b);
+        var actualRoot = solver.calcForFunction(func, pointA, pointB);
 
         //Assert
-        Assertions.assertEquals(actual, expected, solver.getAccuracy());
-
+        Assertions.assertEquals(actualRoot, expectedRoot, solver_accuracy);
     }
 
-    public static Stream<Arguments> polyTestInlineData() {
+    @Test
+    @DisplayName("should throw an exception if point evaluation procedure fails to determine valid counterpart points")
+    static Stream<Arguments> polyTestInlineData() {
         return Stream.of(
                 Arguments.of(50000, 120000),
                 Arguments.of(80000, 200000),
@@ -56,6 +76,17 @@ public class BrentSolverTest {
                 Arguments.of(20000, 80000),
                 Arguments.of(10000, 20000)
         );
+    }
+
+    @Test
+    @DisplayName("should throw an exception if point evaluation procedure fails to determine valid counterpart points")
+    void findRoot_givenAcosFunction_throwsSolverResultException() {
+        // Arrange
+        solver.setCounterpartPoints(10, 5);
+        DoubleFunction<Double> func = x -> Math.acos(x / 2);
+
+        // Assert
+        Assertions.assertThrows(BrentSolverException.class, () -> solver.calcForFunction(func));
     }
 
 }

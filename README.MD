@@ -1,4 +1,4 @@
-## BRENT-DECKER SOLVER
+## BRENT-DEKKER SOLVER
 
 ---
 
@@ -6,21 +6,25 @@
 
 > VERSION: 1.1.0 <br>
 > AUTHOR: PIOTR JAŻDŻYK <br>
-> LINKEDIN: https://pl.linkedin.com/in/pjazdzyk/en <br>
+> LINKEDIN: https://www.linkedin.com/in/pjazdzyk <br>
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.pjazdzyk/brent-decker-solver/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.pjazdzyk/brent-decker-solver)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.pjazdzyk/brent-dekker-solver/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.pjazdzyk/brent-dekker-solver)
 
 ### SHORT DESCRIPTION:
 
-A math algorithm for finding roots of continuous and single-variable functions, based on a modified version of the Brent-Decker algorithm.
+A math algorithm for finding roots of continuous and single-variable functions, based on a modified version of the Brent-Dekker algorithm.
 This solver uses a combination of Secant and Bisection numerical schemes and inverse quadratic interpolation to reduce calculation time as much as possible. 
 The algorithm code is based on the paper published by Zhengqiu Zhang in 2011. The new procedure has lower complexity and provides faster convergence than a classical 
-Brent-Decker algorithm. 
+Brent-Dekker algorithm. 
 To mitigate the problematic issue with providing valid counterpart points <a,b> for which f(a) and f(b) will have opposite signs (meaning, that the root must be in the range between these points) the
 automatic point evaluation algorithm was proposed, in which case solution will be found even for invalid points, but only if they
 are close enough to the root and have a similar order of magnitude as the expected function root. However, this may not work
 properly for strong non-linearity's or if the root is far away from any of the proposed points. The evaluation algorithm is an experimental
 feature and will be subject of further development and improvement. Any suggestions on how to make it better are most welcome.
+
+### TECH
+![image](https://img.shields.io/badge/Java-16-orange?style=for-the-badge)
+![image](https://img.shields.io/badge/Junit5-25A162?style=for-the-badge&logo=junit5&logoColor=white)
 
 ### LEGAL DISCLAIMER:
 
@@ -30,7 +34,7 @@ properly include the source and author in your references or documentation. For 
 
 ### CURRENT FUNCTIONALITY:
 
-1. Iterative solver based on Brent-Decker numerical scheme for solving any type of single variable equations.
+1. Iterative solver based on Brent-Dekker numerical scheme for solving any type of single variable equations.
 2. Improved convergence speed by implementing algorithm modifications proposed by Zhengqiu Zhang.
 3. Added automatic counterpart evaluation algorithm to make solver less susceptible to invalid initial guess.
 
@@ -42,7 +46,7 @@ properly include the source and author in your references or documentation. For 
 
 ### USER GUIDE:
 
-STEP 1: Brent-Decker solver instance creation:<br>
+STEP 1: Brent-Dekker solver instance creation:<br>
 ```BrentSolver solver = new BrentSolver();```
 
 STEP 2: Provide equation as double function. Equation must be in form ie: a*x+b = 0:<br>
@@ -151,5 +155,5 @@ The evaluation procedure is not bulletproof, I am looking forward to any improve
 
 ### REFERENCE SOURCE:
 
-* [1] BRENT-DECKER ITERATIVE SOLVER - MODIFIED ALGORITHM PROPOSED BY Zhengqiu Zhang / International Journal of
+* [1] BRENT-DEKKER ITERATIVE SOLVER - MODIFIED ALGORITHM PROPOSED BY Zhengqiu Zhang / International Journal of
   Experimental Algorithms (IJEA), Volume (2) : Issue (1) : 2011

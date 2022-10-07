@@ -4,7 +4,7 @@
 
 ### Numerical solver for finding function roots based on the improved algorithm proposed by Zhengqiu Zhang with new experimental counterpart points evaluation procedure.
 
-> VERSION: 1.1.0 <br>
+> VERSION: 1.1.1 <br>
 > AUTHOR: PIOTR JAŻDŻYK <br>
 > LINKEDIN: https://www.linkedin.com/in/pjazdzyk <br>
 
@@ -25,6 +25,7 @@ feature and will be subject of further development and improvement. Any suggesti
 ### TECH
 ![image](https://img.shields.io/badge/Java-16-orange?style=for-the-badge)
 ![image](https://img.shields.io/badge/Junit5-25A162?style=for-the-badge&logo=junit5&logoColor=white)
+
 
 ### LEGAL DISCLAIMER:
 

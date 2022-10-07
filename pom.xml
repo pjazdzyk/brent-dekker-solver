@@ -21,12 +21,12 @@
     </dependencies>
 
     <groupId>io.github.pjazdzyk</groupId>
-    <artifactId>brent-decker-solver</artifactId>
+    <artifactId>brent-dekker-solver</artifactId>
     <version>1.1.1</version>
 
     <name>Brent Dekker Solver</name>
     <description>The algorithm for finding roots of continuous and single-variable math functions,
-        based on a modified version of the Brent-Decker algorithm.</description>
+        based on a modified version of the Brent-Dekker algorithm.</description>
     <url>https://github.com/pjazdzyk/brent-dekker-solver</url>
 
     <licenses>

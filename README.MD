@@ -8,7 +8,7 @@
 > AUTHOR: PIOTR JAŻDŻYK <br>
 > LINKEDIN: https://www.linkedin.com/in/pjazdzyk <br>
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.pjazdzyk/brent-decker-solver/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.pjazdzyk/brent-decker-solver)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.pjazdzyk/brent-dekker-solver/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.pjazdzyk/brent-dekker-solver)
 
 ### SHORT DESCRIPTION
 

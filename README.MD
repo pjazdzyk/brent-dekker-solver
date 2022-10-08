@@ -8,11 +8,11 @@
 > AUTHOR: PIOTR JAŻDŻYK <br>
 > LINKEDIN: https://www.linkedin.com/in/pjazdzyk <br>
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.pjazdzyk/brent-dekker-solver/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.pjazdzyk/brent-dekker-solver)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.pjazdzyk/brent-decker-solver/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.pjazdzyk/brent-decker-solver)
 
-### SHORT DESCRIPTION:
+### SHORT DESCRIPTION
 
-A math algorithm for finding roots of continuous and single-variable functions, based on a modified version of the Brent-Dekker algorithm.
+This Java implementation of a math algorithm for finding roots of continuous and single-variable functions, based on a modified version of the Brent-Dekker algorithm.
 This solver uses a combination of Secant and Bisection numerical schemes and inverse quadratic interpolation to reduce calculation time as much as possible. 
 The algorithm code is based on the paper published by Zhengqiu Zhang in 2011. The new procedure has lower complexity and provides faster convergence than a classical 
 Brent-Dekker algorithm. 
@@ -23,29 +23,42 @@ properly for strong non-linearity's or if the root is far away from any of the p
 feature and will be subject of further development and improvement. Any suggestions on how to make it better are most welcome.
 
 ### TECH
-![image](https://img.shields.io/badge/Java-16-orange?style=for-the-badge)
-![image](https://img.shields.io/badge/Junit5-25A162?style=for-the-badge&logo=junit5&logoColor=white)
+![image](https://img.shields.io/badge/16-Java-orange?style=for-the-badge) &nbsp;
+![image](https://img.shields.io/badge/apache_maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white) &nbsp;
+![image](https://img.shields.io/badge/Junit5-25A162?style=for-the-badge&logo=junit5&logoColor=white) &nbsp;
 
+### INSTALLATION
 
-### LEGAL DISCLAIMER:
+Just copy Maven dependency provided below to your pom.xml file, and you are ready to go. For other package managers, check maven central repository: 
+[Brent-Dekker-Solver](https://search.maven.org/artifact/io.github.pjazdzyk/brent-dekker-solver/1.1.1/jar).
+
+```
+<dependency>
+  <groupId>io.github.pjazdzyk</groupId>
+  <artifactId>brent-dekker-solver</artifactId>
+  <version>1.1.1</version>
+</dependency>
+```
+
+### LEGAL DISCLAIMER
 
 This code is my intellectual property. Please have respect for this. You can use it freely in any academic or
 non-commercial use if you
 properly include the source and author in your references or documentation. For commercial use, please contact me first.
 
-### CURRENT FUNCTIONALITY:
+### CURRENT FUNCTIONALITY
 
 1. Iterative solver based on Brent-Dekker numerical scheme for solving any type of single variable equations.
-2. Improved convergence speed by implementing algorithm modifications proposed by Zhengqiu Zhang.
-3. Added automatic counterpart evaluation algorithm to make solver less susceptible to invalid initial guess.
+2. Improved convergence speed by implementing algorithm modifications proposed by Zhengqiu Zhang in his paper.
+3. Automatic counterpart evaluation algorithm to make solver less susceptible to invalid initial guess.
 
-### IMPROVEMENT REQUEST:
+### COLLABORATION
 
 1. Code review and comments, suggestions how to make this better.
-2. Any convergence speedup proposals.
-3. Modifications, improvements or new ideas for counterpart point evaluation procedure.
+2. Convergence speedup and complexity reduction ideas.
+3. Counterpart points evaluation procedure improvement.
 
-### USER GUIDE:
+### USER GUIDE WITH EXAMPLES
 
 STEP 1: Brent-Dekker solver instance creation:<br>
 ```BrentSolver solver = new BrentSolver();```
@@ -154,7 +167,11 @@ As it was demonstrated, this solver can handle almost any equation in a very few
 provide a solution even if counterpart points are invalid (but still they need to be of the proper order of magnitude).
 The evaluation procedure is not bulletproof, I am looking forward to any improvement proposals from the community.
 
-### REFERENCE SOURCE:
+### REFERENCE SOURCE
 
 * [1] BRENT-DEKKER ITERATIVE SOLVER - MODIFIED ALGORITHM PROPOSED BY Zhengqiu Zhang / International Journal of
   Experimental Algorithms (IJEA), Volume (2) : Issue (1) : 2011
+
+## Acknowledgments
+* [Shields.io](https://img.shields.io)
+* [Badges 4 README.md](https://github.com/alexandresanlim/Badges4-README.md-Profile)

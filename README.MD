@@ -12,15 +12,15 @@
 
 ### SHORT DESCRIPTION
 
-This Java implementation of a math algorithm for finding roots of continuous and single-variable functions, based on a modified version of the Brent-Dekker algorithm.
-This solver uses a combination of Secant and Bisection numerical schemes and inverse quadratic interpolation to reduce calculation time as much as possible. 
-The algorithm code is based on the paper published by Zhengqiu Zhang in 2011. The new procedure has lower complexity and provides faster convergence than a classical 
-Brent-Dekker algorithm. 
-To mitigate the problematic issue with providing valid counterpart points <a,b> for which f(a) and f(b) will have opposite signs (meaning, that the root must be in the range between these points) the
+This is a Java implementation of a math algorithm for finding roots of continuous and single-variable functions, based on a modified version of the Brent-Dekker algorithm.
+This solver uses a combination of Secant and Bisection numerical schemes and inverse quadratic interpolation to reduce calculation time as much as possible.
+The algorithm code is based on the paper published by Zhengqiu Zhang in 2011. The new procedure has lower complexity and provides faster convergence than a classical
+Brent-Dekker algorithm.
+To mitigate the problematic issue by providing valid counterpart points <a,b> for which f(a) and f(b) will have opposite signs (meaning, that the root must be in the range between these points) the
 automatic point evaluation algorithm was proposed, in which case solution will be found even for invalid points, but only if they
 are close enough to the root and have a similar order of magnitude as the expected function root. However, this may not work
-properly for strong non-linearity's or if the root is far away from any of the proposed points. The evaluation algorithm is an experimental
-feature and will be subject of further development and improvement. Any suggestions on how to make it better are most welcome.
+correctly for strong non-linearity or if the root is far away from any of the proposed points. The evaluation algorithm is an experimental
+feature and will be subject to further development and improvement. Any suggestions on how to make it better are most welcome.
 
 ### TECH
 ![image](https://img.shields.io/badge/16-Java-orange?style=for-the-badge) &nbsp;

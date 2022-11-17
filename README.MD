@@ -32,7 +32,7 @@ feature and will be subject to further development and improvement. Any suggesti
 Just copy Maven dependency provided below to your pom.xml file, and you are ready to go. For other package managers, check maven central repository: 
 [Brent-Dekker-Solver](https://search.maven.org/artifact/io.github.pjazdzyk/brent-dekker-solver/1.1.1/jar).
 
-```
+```xml
 <dependency>
   <groupId>io.github.pjazdzyk</groupId>
   <artifactId>brent-dekker-solver</artifactId>
@@ -61,16 +61,27 @@ properly include the source and author in your references or documentation. For 
 ### USER GUIDE WITH EXAMPLES
 
 STEP 1: Brent-Dekker solver instance creation:<br>
-```BrentSolver solver = new BrentSolver();```
+```java
+BrentSolver solver = new BrentSolver();
+```
 
-STEP 2: Provide equation as double function. Equation must be in form ie: a*x+b = 0:<br>
+STEP 2: Provide equation as double function. Equation must be in form ie: a * x + b = 0:<br>
 
 * I. Linear function: 2x + 10 = 0 <br>
-  ```DoubleFunction<Double> linear = x -> 2*x + 10;```<br>
-* II. Quadratic function: 2x^2 +5x -3 = 0 <br>
-  ```DoubleFunction<Double> quadratic = x -> 2*x*x + 5*x -3;```
+
+```java
+DoubleFunction<Double> linear = x -> 2 * x + 10;
+```
+
+* II. Quadratic function: 2x^2 +5x -3 = 0
+```java
+DoubleFunction<Double> quadratic = x -> 2 * x * x + 5 * x -3;
+```
+
 * III. Complex function with nested argument under Logarithm <br>
-  ```DoubleFunction<Double> logNested = x -> 93.3519196629417 - (-237300 * Math.log(0.001638 * x) / (1000 * Math.log(0.001638 * x) - 17269));```
+```java
+DoubleFunction<Double> logNested = x -> 93.3519196629417 - (-237300 * Math.log(0.001638 * x) / (1000 * Math.log(0.001638 * x) - 17269));
+```
 
 STEP 3: Provide counterpart points a and b, as a scope, between a solution is expected to be found.
 Function value for that points must result in opposite signs. If this fails, solver is equipped with the weak evaluation
@@ -78,7 +89,7 @@ procedure,
 which will attempt to adjust your points to meet the criteria. If it does not succeed an exception is thrown.
 Let's try the first function. Default counterpart points are +50 / -50, lets try with these:
 
-```
+```java
 var resultLinear = solver.calcForFunction(linear);
 System.out.println("Linear function root = " + resultLinear);    
     //Outputs -5.0 
@@ -88,7 +99,7 @@ solver outputs -5.0 what is the expected solution.<br>
 Now the more difficult part, the quadratic function. This function has two roots: -3.0, 0.5. Lets he how solver will
 behave:
 
-```
+```java
 var resultQuadratic1stRoot = solver.calcForFunction(quadratic);
 System.out.println("Quadratic function 1st root = " + resultQuadratic1stRoot);  
     //Outputs -3.0
@@ -99,7 +110,7 @@ If the found root is not the one you have expected - you may need to adjust the 
 be found.
 Let's try to adjust counterpart points to get the other root:
 
-```
+```java
 solver.setCounterpartPoints(-1,2);                                              
     // We can expect that second root is between 2 and 1
 var resultQuadratic2ndRoot = solver.findRoot();                                 
@@ -111,7 +122,7 @@ System.out.println("Quadratic function 2nd root = " + resultQuadratic2ndRoot);
 Last example is to test if solver will manage to find root for a complex coupled argument, for an example inside a
 logarithm:
 
-```
+```java
 var resultLogNested = solver.findRoot();
 System.out.println("Nested log function = " + resultLogNested);
 ```
@@ -126,7 +137,7 @@ we need to change the solution range scope to a more appropriate threshold, for 
 invoking
 a separate counterpart setter, you can use an overloaded version of calcForFunction method:
 
-```
+```java
 var resultLogNested = solver.calcForFunction(logNested,20000,200000);
 System.out.println("Nested log function root = " + resultLogNested);   
     // Outputs: 79999.99999999991, with some small numerical error
@@ -141,7 +152,7 @@ experience says that in many cases
 it will not be possible to automatically provide correct points each time.
 To see each step calculation you can turn on the diagnostic output.
 
-```
+```java
 solver.setShowDiagnostics(true);                                
 resultLogNested = solver.calcForFunction(logNested,100000,200000);        
     // for these points f_a and f_b will not have an opposite signs                        
@@ -157,7 +168,7 @@ that second counterpart point needs to be changed to 74939.747 for the solver to
 
 For single result, you can quickly use static method ofFunction() and get result immediately.
 
-```
+```java
 var functionRoot = BrentSolver.ofFunction(x-> 2*x+10, -10,10);
 System.out.println(functionRoot);    
     //Outputs: -5.0

@@ -49,7 +49,7 @@ public class BrentSolver {
     private int evalXDivider = 2;
 
     // DIAGNOSTICS OUTPUT CONTROL
-    private boolean showDiagnostics = true;
+    private boolean showDiagnostics = false;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BrentSolver.class);
 

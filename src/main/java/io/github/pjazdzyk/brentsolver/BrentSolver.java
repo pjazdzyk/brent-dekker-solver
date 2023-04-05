@@ -1,6 +1,8 @@
 package io.github.pjazdzyk.brentsolver;
 
 import java.util.function.DoubleFunction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * BRENT-DEKKER ITERATIVE SOLVER - MODIFIED ALGORITHM PROPOSED BY Zhengqiu Zhang / International Journal of Experimental<br>
@@ -47,7 +49,9 @@ public class BrentSolver {
     private int evalXDivider = 2;
 
     // DIAGNOSTICS OUTPUT CONTROL
-    private boolean showDiagnostics = false;
+    private boolean showDiagnostics = true;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(BrentSolver.class);
 
     /**
      * Initializes solver instance with function output set as 0, with default name.
@@ -111,9 +115,12 @@ public class BrentSolver {
         if (Math.abs(f_b) < accuracy)
             return b;
         //If at this stage proper A-B condition is not achievable - an exception is thrown.
-        if (initialABConditionIsNotMet())
-            throw new BrentSolverException(id + ": EVALUATION PROCEDURE FAILED: f(a) i f(b) must have an opposite signs. Current values:"
-                    + String.format(" a = %.3f, b = %.3f,  f(a)= %.3f, f(b)=%.3f", a, b, f_a, f_b));
+        if (initialABConditionIsNotMet()) {
+            String errorMsg = id + ": EVALUATION PROCEDURE FAILED: f(a) i f(b) must have an opposite signs. Current values:"
+                    + String.format(" a = %.3f, b = %.3f,  f(a)= %.3f, f(b)=%.3f", a, b, f_a, f_b);
+            LOGGER.error(errorMsg);
+            throw new BrentSolverException(errorMsg);
+        }
         printSolverDiagnostics("\n" + id + ": BEFORE RUN:\n", "\n");
 
         /*--------BEGINNING OF ITERATIVE LOOP--------*/
@@ -381,13 +388,15 @@ public class BrentSolver {
 
     // DIAGNOSTIC OUTPUT
     private void printEvaluationDiagnostics(String titleMsg) {
-        if (showDiagnostics)
-            System.out.println("\n" + titleMsg + " \t EVAL VALUES:" + String.format("a = %.3f, b = %.3f, f(a)= %.3f, f(b)=%.3f", a, b, f_a, f_b));
+        if (showDiagnostics) {
+            LOGGER.info(String.format("\n" + titleMsg + " \t EVAL VALUES:" + String.format("a = %.3f, b = %.3f, f(a)= %.3f, f(b)=%.3f", a, b, f_a, f_b)));
+        }
     }
 
     private void printSolverDiagnostics(String titleMsg, String endMsg) {
-        if (showDiagnostics)
-            System.out.printf(titleMsg + "s= %.5f, a= %.5f, f(a)= %.5f, b= %.5f, f(b)= %.5f, c= %.5f, f(c)= %.5f \t\t\t" + endMsg + "%n", s, a, f_a, b, f_b, c, f_c);
+        if (showDiagnostics) {
+            LOGGER.info(String.format(titleMsg + "s= %.5f, a= %.5f, f(a)= %.5f, b= %.5f, f(b)= %.5f, c= %.5f, f(c)= %.5f \t\t\t" + endMsg + "%n", s, a, f_a, b, f_b, c, f_c));
+        }
     }
 
     // QUICK INSTANCE

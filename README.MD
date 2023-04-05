@@ -23,7 +23,7 @@ correctly for strong non-linearity or if the root is far away from any of the pr
 feature and will be subject to further development and improvement. Any suggestions on how to make it better are most welcome.
 
 ### TECH
-![image](https://img.shields.io/badge/16-Java-orange?style=for-the-badge) &nbsp;
+![image](https://img.shields.io/badge/17-Java-orange?style=for-the-badge) &nbsp;
 ![image](https://img.shields.io/badge/apache_maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white) &nbsp;
 ![image](https://img.shields.io/badge/Junit5-25A162?style=for-the-badge&logo=junit5&logoColor=white) &nbsp;
 

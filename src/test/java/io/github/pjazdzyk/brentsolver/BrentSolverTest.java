@@ -66,8 +66,6 @@ class BrentSolverTest {
         Assertions.assertEquals(actualRoot, expectedRoot, solver_accuracy);
     }
 
-    @Test
-    @DisplayName("should throw an exception if point evaluation procedure fails to determine valid counterpart points")
     static Stream<Arguments> polyTestInlineData() {
         return Stream.of(
                 Arguments.of(50000, 120000),

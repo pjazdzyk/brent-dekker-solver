@@ -100,21 +100,21 @@ public class BrentSolver {
      * @return actual root value
      */
     public final double findRoot() {
-        //To check and set value b as being closer to the root
+        // To check and set value b as being closer to the root
         checkSetAndSwapABPoints(a0, b0);
-        //In case provided by user point "a" or "b" is actually a root
+        // In case provided by user point "a" or "b" is actually a root
         if (Math.abs(f_b) < accuracy)
             return b;
-        //If solver were stopped
+        // If solver were stopped
         if (!runFlag)
             return b;
-        //Checking if Brent AB condition is not met to launch automatic AB points evaluation procedure
+        // Checking if Brent AB condition is not met to launch automatic AB points evaluation procedure
         if (initialABConditionIsNotMet())
             evaluateValidCondition();
-        //In case evaluation procedure will output b as a root
+        // In case evaluation procedure will output b as a root
         if (Math.abs(f_b) < accuracy)
             return b;
-        //If at this stage proper A-B condition is not achievable - an exception is thrown.
+        // If at this stage proper A-B condition is not achievable - an exception is thrown.
         if (initialABConditionIsNotMet()) {
             String errorMsg = id + ": EVALUATION PROCEDURE FAILED: f(a) i f(b) must have an opposite signs. Current values:"
                     + String.format(" a = %.3f, b = %.3f,  f(a)= %.3f, f(b)=%.3f", a, b, f_a, f_b);
@@ -127,7 +127,7 @@ public class BrentSolver {
         while (runFlag) {
             counter++;
 
-            //New additional condition proposed by Zhengqiu Zhang
+            // New additional condition proposed by Zhengqiu Zhang
             c = (a + b) / 2;
             f_c = userFunction.apply(c);
 
@@ -136,7 +136,8 @@ public class BrentSolver {
                 s = inverseQuadraticInterpolation(a, b, c, f_a, f_b, f_c);
             else
                 s = secantMethod(a, b, f_a, f_b);
-            // difference between a and b, to be checked against the target (initialized by default value)
+
+            // Difference between a and b, to be checked against the target (initialized by default value)
             double currentDifference = Math.abs(b - a);
             if (c > s) {
                 var tempC = c;
@@ -159,7 +160,7 @@ public class BrentSolver {
             f_a = userFunction.apply(a);
             f_b = userFunction.apply(b);
 
-            //Calculating current difference after this iteration cycle
+            // Calculating current difference after this iteration cycle
             printSolverDiagnostics(id + ": ITERATION: " + counter + " ", "Diff= " + currentDifference);
             if (currentDifference < accuracy) {
                 runFlag = false;
@@ -169,7 +170,7 @@ public class BrentSolver {
                 runFlag = false;
             }
 
-            //Exception will be thrown if NaN or Infinite values are detected
+            // Exception will be thrown if NaN or Infinite values are detected
             checkForInfiniteOrNaN(f_a, f_b, f_c, f_s);
 
             /*-----------END OF ITERATIVE LOOP-----------*/

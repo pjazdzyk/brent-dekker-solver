@@ -4,14 +4,16 @@
 
 ### Numerical solver for finding function roots based on the improved algorithm proposed by Zhengqiu Zhang with new experimental counterpart points evaluation procedure.
 
-> VERSION: 1.1.1 <br>
 > AUTHOR: PIOTR JAŻDŻYK <br>
 > LINKEDIN: https://www.linkedin.com/in/pjazdzyk <br>
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.pjazdzyk/brent-dekker-solver/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.pjazdzyk/brent-dekker-solver)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.pjazdzyk/brent-dekker-solver/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.pjazdzyk/brent-dekker-solver) &nbsp;
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=pjazdzyk_unitility&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=pjazdzyk_brent-dekker-solver) &nbsp;
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=pjazdzyk_unitility&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=pjazdzyk_brent-dekker-solver) &nbsp;
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=pjazdzyk_unitility&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=pjazdzyk_brent-dekker-solver) &nbsp;
 
 ### SHORT DESCRIPTION
-
+[This is one of my first projects. Code may not]
 This is a Java implementation of a math algorithm for finding roots of continuous and single-variable functions, based on a modified version of the Brent-Dekker algorithm.
 This solver uses a combination of Secant and Bisection numerical schemes and inverse quadratic interpolation to reduce calculation time as much as possible.
 The algorithm code is based on the paper published by Zhengqiu Zhang in 2011. The new procedure has lower complexity and provides faster convergence than a classical

@@ -12,20 +12,13 @@ jobs:
         with:
           java-version: '17'
           distribution: 'zulu'
-          server-id: ossrh
-          server-username: OSSRH_USERNAME
-          server-password: OSSRH_TOKEN
-          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-          gpg-passphrase: GPG_PASSPHRASE
-      - name: Create Maven settings-security.xml file
+
+      - name: Build with Maven
+        run: mvn clean install
+      - name: Publish to Maven Central
         run: |
-          mkdir -p ~/.m2/
-          echo "<settingsSecurity><master>MAVEN_PASSWORD</master></settingsSecurity>" > ~/.m2/settings-security.xml
-        env:
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-      - name: Publish package
-        run: mvn --batch-mode deploy -P release
-        env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_PASSWORD: ${{ secrets.OSSRH_TOKEN }}
-          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+          mvn deploy \
+            -DskipTests \
+            -Dmaven.javadoc.skip=true \
+            -Dgpg.passphrase="${{ secrets.GPG_PASSPHRASE }}" \
+            --settings .github/settings.xml

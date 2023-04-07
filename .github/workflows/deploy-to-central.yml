@@ -1,4 +1,4 @@
-name: Java library publisher
+name: deploy-to-maven-central
 on:
   release:
     types: [created]

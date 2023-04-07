@@ -13,7 +13,6 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=pjazdzyk_unitility&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=pjazdzyk_brent-dekker-solver) &nbsp;
 
 ### SHORT DESCRIPTION
-[This is one of my first projects. Code may not]
 This is a Java implementation of a math algorithm for finding roots of continuous and single-variable functions, based on a modified version of the Brent-Dekker algorithm.
 This solver uses a combination of Secant and Bisection numerical schemes and inverse quadratic interpolation to reduce calculation time as much as possible.
 The algorithm code is based on the paper published by Zhengqiu Zhang in 2011. The new procedure has lower complexity and provides faster convergence than a classical
@@ -25,10 +24,17 @@ correctly for strong non-linearity or if the root is far away from any of the pr
 feature and will be subject to further development and improvement. Any suggestions on how to make it better are most welcome.
 
 ### TECH
+Core: <br>
 ![image](https://img.shields.io/badge/17-Java-orange?style=for-the-badge) &nbsp;
 ![image](https://img.shields.io/badge/apache_maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white) &nbsp;
+![image](https://img.shields.io/badge/apache_LOG4J-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white) &nbsp;
+
+Testing:<br>
 ![image](https://img.shields.io/badge/Junit5-25A162?style=for-the-badge&logo=junit5&logoColor=white) &nbsp;
-![image](https://img.shields.io/badge/apache_log4J-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white) &nbsp;
+
+CI/CD:<br>
+![image](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white) &nbsp;
+![image](https://img.shields.io/badge/Sonar%20cloud-F3702A?style=for-the-badge&logo=sonarcloud&logoColor=white) &nbsp;
 
 ### INSTALLATION
 

@@ -45,7 +45,7 @@ Just copy Maven dependency provided below to your pom.xml file, and you are read
 <dependency>
   <groupId>io.github.pjazdzyk</groupId>
   <artifactId>brent-dekker-solver</artifactId>
-  <version>1.1.1</version>
+  <version>1.1.2</version>
 </dependency>
 ```
 

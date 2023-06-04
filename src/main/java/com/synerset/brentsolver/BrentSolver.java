@@ -1,8 +1,9 @@
-package io.github.pjazdzyk.brentsolver;
+package com.synerset.brentsolver;
 
-import java.util.function.DoubleFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.function.DoubleFunction;
 
 /**
  * BRENT-DEKKER ITERATIVE SOLVER - MODIFIED ALGORITHM PROPOSED BY Zhengqiu Zhang / International Journal of Experimental<br>

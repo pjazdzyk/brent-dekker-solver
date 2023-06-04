@@ -7,7 +7,7 @@
 > AUTHOR: PIOTR JAŻDŻYK <br>
 > LINKEDIN: https://www.linkedin.com/in/pjazdzyk <br>
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.pjazdzyk/brent-dekker-solver/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.pjazdzyk/brent-dekker-solver) &nbsp;
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.synerset/brent-dekker-solver/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.synerset/brent-dekker-solver) &nbsp;
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=pjazdzyk_unitility&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=pjazdzyk_brent-dekker-solver) &nbsp;
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=pjazdzyk_unitility&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=pjazdzyk_brent-dekker-solver) &nbsp;
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=pjazdzyk_unitility&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=pjazdzyk_brent-dekker-solver) &nbsp;
@@ -39,13 +39,13 @@ CI/CD:<br>
 ### INSTALLATION
 
 Just copy Maven dependency provided below to your pom.xml file, and you are ready to go. For other package managers, check maven central repository: 
-[Brent-Dekker-Solver](https://search.maven.org/artifact/io.github.pjazdzyk/brent-dekker-solver/1.1.1/jar).
+[Brent-Dekker-Solver](https://search.maven.org/artifact/com.synerset/brent-dekker-solver/1.1.3/jar).
 
 ```xml
 <dependency>
-  <groupId>io.github.pjazdzyk</groupId>
+  <groupId>com.synerset</groupId>
   <artifactId>brent-dekker-solver</artifactId>
-  <version>1.1.2</version>
+  <version>1.1.3</version>
 </dependency>
 ```
 

@@ -1,4 +1,4 @@
-package io.github.pjazdzyk.brentsolver;
+package com.synerset.brentsolver;
 
 public class BrentSolverException extends RuntimeException {
 

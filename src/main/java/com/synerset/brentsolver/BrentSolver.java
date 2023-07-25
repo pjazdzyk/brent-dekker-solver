@@ -52,7 +52,7 @@ public class BrentSolver {
     // DIAGNOSTICS OUTPUT CONTROL
     private boolean showDiagnostics = false;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BrentSolver.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BrentSolver.class.getSimpleName());
 
     /**
      * Initializes solver instance with function output set as 0, with default name.
@@ -101,20 +101,27 @@ public class BrentSolver {
      * @return actual root value
      */
     public final double findRoot() {
+        LOGGER.info("-----[{}] CALCULATION IN PROGRESS-----", id);
         // To check and set value b as being closer to the root
         checkSetAndSwapABPoints(a0, b0);
         // In case provided by user point "a" or "b" is actually a root
-        if (Math.abs(f_b) < accuracy)
+        if (Math.abs(f_b) < accuracy) {
+            LOGGER.info("CALCULATION COMPLETE. INITIAL VALUE IS A ROOT");
             return b;
+        }
         // If solver were stopped
-        if (!runFlag)
+        if (!runFlag) {
+            LOGGER.info("!!CALCULATION STOPPED!!");
             return b;
+        }
         // Checking if Brent AB condition is not met to launch automatic AB points evaluation procedure
-        if (initialABConditionIsNotMet())
+        if (initialABConditionIsNotMet()) {
             evaluateValidCondition();
+        }
         // In case evaluation procedure will output b as a root
-        if (Math.abs(f_b) < accuracy)
+        if (Math.abs(f_b) < accuracy) {
             return b;
+        }
         // If at this stage proper A-B condition is not achievable - an exception is thrown.
         if (initialABConditionIsNotMet()) {
             String errorMsg = id + ": EVALUATION PROCEDURE FAILED: f(a) i f(b) must have an opposite signs. Current values:"
@@ -122,7 +129,7 @@ public class BrentSolver {
             LOGGER.error(errorMsg);
             throw new BrentSolverException(errorMsg);
         }
-        printSolverDiagnostics("\n" + id + ": BEFORE RUN:\n", "\n");
+        printSolverDiagnostics(id + ": INITIAL VALUES: ", "");
 
         /*--------BEGINNING OF ITERATIVE LOOP--------*/
         while (runFlag) {
@@ -178,6 +185,7 @@ public class BrentSolver {
         }
 
         // b is always closer to the root
+        LOGGER.info("-----[{}] CALCULATION FINISHED-----", id);
         return b;
     }
 
@@ -391,13 +399,13 @@ public class BrentSolver {
     // DIAGNOSTIC OUTPUT
     private void printEvaluationDiagnostics(String titleMsg) {
         if (showDiagnostics) {
-            LOGGER.info(String.format("\n" + titleMsg + " \t EVAL VALUES:" + String.format("a = %.3f, b = %.3f, f(a)= %.3f, f(b)=%.3f", a, b, f_a, f_b)));
+            LOGGER.info(String.format(titleMsg + " \t EVAL VALUES:" + String.format("a = %.3f, b = %.3f, f(a)= %.3f, f(b)=%.3f", a, b, f_a, f_b)));
         }
     }
 
     private void printSolverDiagnostics(String titleMsg, String endMsg) {
         if (showDiagnostics) {
-            LOGGER.info(String.format(titleMsg + "s= %.5f, a= %.5f, f(a)= %.5f, b= %.5f, f(b)= %.5f, c= %.5f, f(c)= %.5f \t\t\t" + endMsg + "%n", s, a, f_a, b, f_b, c, f_c));
+            LOGGER.info(String.format(titleMsg + "s= %.5f, a= %.5f, f(a)= %.5f, b= %.5f, f(b)= %.5f, c= %.5f, f(c)= %.5f \t" + endMsg,  s, a, f_a, b, f_b, c, f_c));
         }
     }
 

@@ -18,8 +18,9 @@ class BrentSolverTest {
 
     @BeforeEach
     void setUp() {
-        this.solver = new BrentSolver("Test-SOLVER");
-        this.solver_accuracy = solver.getAccuracy();
+        solver = new BrentSolver("Test-SOLVER");
+        solver_accuracy = solver.getAccuracy();
+        solver.setShowDiagnostics(true);
     }
 
     @Test

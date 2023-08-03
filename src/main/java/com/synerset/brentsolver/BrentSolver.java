@@ -101,17 +101,17 @@ public class BrentSolver {
      * @return actual root value
      */
     public final double findRoot() {
-        LOGGER.info("-----[{}] CALCULATION IN PROGRESS-----", id);
+        if(showDiagnostics) LOGGER.info("-----[{}] CALCULATION IN PROGRESS-----", id);
         // To check and set value b as being closer to the root
         checkSetAndSwapABPoints(a0, b0);
         // In case provided by user point "a" or "b" is actually a root
         if (Math.abs(f_b) < accuracy) {
-            LOGGER.info("CALCULATION COMPLETE. INITIAL VALUE IS A ROOT");
+            if(showDiagnostics) LOGGER.info("CALCULATION COMPLETE. INITIAL VALUE IS A ROOT");
             return b;
         }
         // If solver were stopped
         if (!runFlag) {
-            LOGGER.info("!!CALCULATION STOPPED!!");
+            if(showDiagnostics) LOGGER.info("!!CALCULATION STOPPED!!");
             return b;
         }
         // Checking if Brent AB condition is not met to launch automatic AB points evaluation procedure
@@ -185,7 +185,7 @@ public class BrentSolver {
         }
 
         // b is always closer to the root
-        LOGGER.info("-----[{}] CALCULATION FINISHED-----", id);
+        if(showDiagnostics) LOGGER.info("-----[{}] CALCULATION FINISHED-----", id);
         return b;
     }
 

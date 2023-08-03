@@ -21,7 +21,9 @@ To mitigate the problematic issue by providing valid counterpart points <a,b> fo
 automatic point evaluation algorithm was proposed, in which case solution will be found even for invalid points, but only if they
 are close enough to the root and have a similar order of magnitude as the expected function root. However, this may not work
 correctly for strong non-linearity or if the root is far away from any of the proposed points. The evaluation algorithm is an experimental
-feature and will be subject to further development and improvement. Any suggestions on how to make it better are most welcome.
+feature and will be subject to further development and improvement. Any suggestions on how to make it better are most welcome.<br>
+**Not a thread-safe.** This solver is not state-less and it is mutable. It is not allowed to use the same instance in concurrent applications. User must ensure that
+each thread uses new instance of the solver.
 
 ### TECH
 Core: <br>
@@ -39,13 +41,13 @@ CI/CD:<br>
 ### INSTALLATION
 
 Just copy Maven dependency provided below to your pom.xml file, and you are ready to go. For other package managers, check maven central repository: 
-[Brent-Dekker-Solver](https://search.maven.org/artifact/com.synerset/brent-dekker-solver/1.1.3/jar).
+[Brent-Dekker-Solver](https://search.maven.org/artifact/com.synerset/brent-dekker-solver/1.1.4/jar).
 
 ```xml
 <dependency>
   <groupId>com.synerset</groupId>
   <artifactId>brent-dekker-solver</artifactId>
-  <version>1.1.3</version>
+  <version>1.1.4</version>
 </dependency>
 ```
 

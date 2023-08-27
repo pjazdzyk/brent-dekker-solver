@@ -4,9 +4,10 @@
 
 ### Numerical solver for finding function roots based on the improved algorithm proposed by Zhengqiu Zhang with new experimental counterpart points evaluation procedure.
 
-> AUTHOR: PIOTR JAŻDŻYK <br>
+> AUTHOR: PIOTR JAZDZYK <br>
 > LINKEDIN: https://www.linkedin.com/in/pjazdzyk <br>
 
+[![Brent-Dekker-Solver](https://img.shields.io/github/v/release/pjazdzyk/brent-dekker-solver?label=Brent-Dekker%20solver&color=13ADF3&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMi41bW0iIGhlaWdodD0iMTQuNW1tIiB2aWV3Qm94PSIwIDAgMjI1MCAxNDUwIj4NCiAgPHBvbHlnb24gZmlsbD0iIzUwN0QxNCIgcG9pbnRzPSIyMjQxLjAzLDE1Ljg4IDExMzYuMzgsMTUuODQgOTA1Ljg4LDQxNS4xIDIwMTAuNTMsNDE1LjA5IiAvPg0KICA8cG9seWdvbiBmaWxsPSIjNzFBQjIzIiBwb2ludHM9IjExMTYuMzgsMTUuODQgNjU1Ljk5LDE1Ljg0IDQ5NC4xNSwyOTYuMTcgNzI0LjM1LDY5NC44OCIgLz4NCiAgPHBvbHlnb24gZmlsbD0iIzhBQzkzNCIgcG9pbnRzPSI0ODQuMTUsMzA2LjE3IDI1NS4wNiw3MDIuOTYgMzg3LjY2LDkzMi42NCA4NDUuODMsOTMyLjYzIiAvPg0KICA8cG9seWdvbiBmaWxsPSIjNThEMEZGIiBwb2ludHM9Ii03LjE3LDE0NDAuMDkgMTA5Ny45NywxNDQwLjA4IDEzMjguNDcsMTA0MC44MyAyMjMuMzIsMTA0MC44NSIgLz4NCiAgPHBvbHlnb24gZmlsbD0iIzEzQURGMyIgcG9pbnRzPSIxNzM5LjA0LDExNjAuOTEgMTUwOS4wOSw3NjIuNjQgMTExNy45NywxNDQwLjA4IDExODYuOTMsMTQ0MC4wOCAxNTc3Ljg3LDE0NDAuMDgiIC8+DQogIDxwb2x5Z29uIGZpbGw9IiMwMzkzRDAiIHBvaW50cz0iMTk3OC44LDc1Mi45NiAxODQ2LjIsNTIzLjMgMTM4Ni42OCw1MjMuMyAxNzQ5LjA0LDExNTAuOTEiIC8+DQo8L3N2Zz4=)](https://github.com/pjazdzyk/brent-dekker-solver)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.synerset/brent-dekker-solver/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.synerset/brent-dekker-solver) &nbsp;
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=pjazdzyk_unitility&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=pjazdzyk_brent-dekker-solver) &nbsp;
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=pjazdzyk_unitility&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=pjazdzyk_brent-dekker-solver) &nbsp;
@@ -101,9 +102,8 @@ which will attempt to adjust your points to meet the criteria. If it does not su
 Let's try the first function. Default counterpart points are +50 / -50, lets try with these:
 
 ```java
-var resultLinear = solver.calcForFunction(linear);
-System.out.println("Linear function root = " + resultLinear);    
-    //Outputs -5.0 
+var resultLinear = solver.calcForFunction(linear); 
+// Outputs -5.0 
 ```
 
 solver outputs -5.0 what is the expected solution.<br>
@@ -111,9 +111,8 @@ Now the more difficult part, the quadratic function. This function has two roots
 behave:
 
 ```java
-var resultQuadratic1stRoot = solver.calcForFunction(quadratic);
-System.out.println("Quadratic function 1st root = " + resultQuadratic1stRoot);  
-    //Outputs -3.0
+var resultQuadratic1stRoot = solver.calcForFunction(quadratic); 
+// Outputs -3.0
 ```
 
 It is important to understand what happened above. The solver outputs the first root it finds and only one.
@@ -123,19 +122,18 @@ Let's try to adjust counterpart points to get the other root:
 
 ```java
 solver.setCounterpartPoints(-1,2);                                              
-    // We can expect that second root is between 2 and 1
+// We can expect that second root is between 2 and 1
 var resultQuadratic2ndRoot = solver.findRoot();                                 
-    // Desired function is already set, so can simply invoke calculation method.
-System.out.println("Quadratic function 2nd root = " + resultQuadratic2ndRoot);  
-    // Outputs 0.5, the second root
+// Desired function is already set, so can simply invoke calculation method.
+// Outputs 0.5, the second root
 ```
 
 Last example is to test if solver will manage to find root for a complex coupled argument, for an example inside a
 logarithm:
 
 ```java
+solver.setFunction(logNested);
 var resultLogNested = solver.findRoot();
-System.out.println("Nested log function = " + resultLogNested);
 ```
 
 If you run the code above, you will get an exception with information that NAN value was detected, which means that
@@ -150,8 +148,7 @@ a separate counterpart setter, you can use an overloaded version of calcForFunct
 
 ```java
 var resultLogNested = solver.calcForFunction(logNested,20000,200000);
-System.out.println("Nested log function root = " + resultLogNested);   
-    // Outputs: 79999.99999999991, with some small numerical error
+// Outputs: 79999.99999999991, with some small numerical error
 ```
 
 Even if the provided counterpart points are invalid as shown above - the automatic evaluation algorithm will adjust them
@@ -166,9 +163,8 @@ To see each step calculation you can turn on the diagnostic output.
 ```java
 solver.setShowDiagnostics(true);                                
 resultLogNested = solver.calcForFunction(logNested,100000,200000);        
-    // for these points f_a and f_b will not have an opposite signs                        
-System.out.println("\nNested log function root = "  + resultLogNested);   
-    // despite invalid points, AB evaluation algorithms works fine
+// for these points f_a and f_b will not have an opposite signs                        
+// despite invalid points, AB evaluation algorithms works fine
 ```
 
 Despite the fact that the solution was not in the scope of provided counterpart points, the solver still managed to
@@ -181,19 +177,38 @@ For single result, you can quickly use static method ofFunction() and get result
 
 ```java
 var functionRoot = BrentSolver.ofFunction(x-> 2*x+10, -10,10);
-System.out.println(functionRoot);    
-    //Outputs: -5.0
+// Outputs: -5.0
 ```
 
 As it was demonstrated, this solver can handle almost any equation in a very few iterations steps and manages to
 provide a solution even if counterpart points are invalid (but still they need to be of the proper order of magnitude).
 The evaluation procedure is not bulletproof, I am looking forward to any improvement proposals from the community.
 
+### License
+MIT LICENSE.<br>
+This work is licensed under the terms of the MIT License with the additional requirement that proper attribution be given
+to the [Piotr Jazdzyk](https://www.linkedin.com/in/pjazdzyk) as the original author in all derivative works and publications.
+
+### License
+I have provided badges that you can include in your project to showcase your usage of our library: <br>
+
+Small shield with referenced most recent version tag:<br>
+[![Brent-Dekker-Solver](https://img.shields.io/github/v/release/pjazdzyk/brent-dekker-solver?label=Brent-Dekker%20solver&color=13ADF3&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMi41bW0iIGhlaWdodD0iMTQuNW1tIiB2aWV3Qm94PSIwIDAgMjI1MCAxNDUwIj4NCiAgPHBvbHlnb24gZmlsbD0iIzUwN0QxNCIgcG9pbnRzPSIyMjQxLjAzLDE1Ljg4IDExMzYuMzgsMTUuODQgOTA1Ljg4LDQxNS4xIDIwMTAuNTMsNDE1LjA5IiAvPg0KICA8cG9seWdvbiBmaWxsPSIjNzFBQjIzIiBwb2ludHM9IjExMTYuMzgsMTUuODQgNjU1Ljk5LDE1Ljg0IDQ5NC4xNSwyOTYuMTcgNzI0LjM1LDY5NC44OCIgLz4NCiAgPHBvbHlnb24gZmlsbD0iIzhBQzkzNCIgcG9pbnRzPSI0ODQuMTUsMzA2LjE3IDI1NS4wNiw3MDIuOTYgMzg3LjY2LDkzMi42NCA4NDUuODMsOTMyLjYzIiAvPg0KICA8cG9seWdvbiBmaWxsPSIjNThEMEZGIiBwb2ludHM9Ii03LjE3LDE0NDAuMDkgMTA5Ny45NywxNDQwLjA4IDEzMjguNDcsMTA0MC44MyAyMjMuMzIsMTA0MC44NSIgLz4NCiAgPHBvbHlnb24gZmlsbD0iIzEzQURGMyIgcG9pbnRzPSIxNzM5LjA0LDExNjAuOTEgMTUwOS4wOSw3NjIuNjQgMTExNy45NywxNDQwLjA4IDExODYuOTMsMTQ0MC4wOCAxNTc3Ljg3LDE0NDAuMDgiIC8+DQogIDxwb2x5Z29uIGZpbGw9IiMwMzkzRDAiIHBvaW50cz0iMTk3OC44LDc1Mi45NiAxODQ2LjIsNTIzLjMgMTM4Ni42OCw1MjMuMyAxNzQ5LjA0LDExNTAuOTEiIC8+DQo8L3N2Zz4=)](https://github.com/pjazdzyk/brent-dekker-solver)
+```markdown
+[![Brent-Dekker-Solver](https://img.shields.io/github/v/release/pjazdzyk/brent-dekker-solver?label=Brent-Dekker%20solver&color=13ADF3&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMi41bW0iIGhlaWdodD0iMTQuNW1tIiB2aWV3Qm94PSIwIDAgMjI1MCAxNDUwIj4NCiAgPHBvbHlnb24gZmlsbD0iIzUwN0QxNCIgcG9pbnRzPSIyMjQxLjAzLDE1Ljg4IDExMzYuMzgsMTUuODQgOTA1Ljg4LDQxNS4xIDIwMTAuNTMsNDE1LjA5IiAvPg0KICA8cG9seWdvbiBmaWxsPSIjNzFBQjIzIiBwb2ludHM9IjExMTYuMzgsMTUuODQgNjU1Ljk5LDE1Ljg0IDQ5NC4xNSwyOTYuMTcgNzI0LjM1LDY5NC44OCIgLz4NCiAgPHBvbHlnb24gZmlsbD0iIzhBQzkzNCIgcG9pbnRzPSI0ODQuMTUsMzA2LjE3IDI1NS4wNiw3MDIuOTYgMzg3LjY2LDkzMi42NCA4NDUuODMsOTMyLjYzIiAvPg0KICA8cG9seWdvbiBmaWxsPSIjNThEMEZGIiBwb2ludHM9Ii03LjE3LDE0NDAuMDkgMTA5Ny45NywxNDQwLjA4IDEzMjguNDcsMTA0MC44MyAyMjMuMzIsMTA0MC44NSIgLz4NCiAgPHBvbHlnb24gZmlsbD0iIzEzQURGMyIgcG9pbnRzPSIxNzM5LjA0LDExNjAuOTEgMTUwOS4wOSw3NjIuNjQgMTExNy45NywxNDQwLjA4IDExODYuOTMsMTQ0MC4wOCAxNTc3Ljg3LDE0NDAuMDgiIC8+DQogIDxwb2x5Z29uIGZpbGw9IiMwMzkzRDAiIHBvaW50cz0iMTk3OC44LDc1Mi45NiAxODQ2LjIsNTIzLjMgMTM4Ni42OCw1MjMuMyAxNzQ5LjA0LDExNTAuOTEiIC8+DQo8L3N2Zz4=)](https://github.com/pjazdzyk/brent-dekker-solver)
+```
+Tech shield with version tag for manual adjustment (you can indicate which version you actually use): <br>
+[![Brent-Dekker-Solver](https://img.shields.io/badge/Brent_Dekker%20solver-v1.1.4-13ADF3?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMi41bW0iIGhlaWdodD0iMTQuNW1tIiB2aWV3Qm94PSIwIDAgMjI1MCAxNDUwIj4NCiAgPHBvbHlnb24gZmlsbD0iIzUwN0QxNCIgcG9pbnRzPSIyMjQxLjAzLDE1Ljg4IDExMzYuMzgsMTUuODQgOTA1Ljg4LDQxNS4xIDIwMTAuNTMsNDE1LjA5IiAvPg0KICA8cG9seWdvbiBmaWxsPSIjNzFBQjIzIiBwb2ludHM9IjExMTYuMzgsMTUuODQgNjU1Ljk5LDE1Ljg0IDQ5NC4xNSwyOTYuMTcgNzI4LjM1LDY5NC44OCIgLz4NCiAgPHBvbHlnb24gZmlsbD0iIzhBQzkzNCIgcG9pbnRzPSI0ODQuMTUsMzA2LjE3IDI1NS4wNiw3MDIuOTYgMzg3LjY2LDkzMi42NCA4NDUuODMsOTMyLjYzIiAvPg0KICA8cG9seWdvbiBmaWxsPSIjNThEMEZGIiBwb2ludHM9Ii03LjE3LDE0NDAuMDkgMTA5Ny45NywxNDQwLjA4IDEzMjguNDcsMTA0MC44MyAyMjMuMzIsMTA0MC44NSIgLz4NCiAgPHBvbHlnb24gZmlsbD0iIzEzQURGMyIgcG9pbnRzPSIxNzM5LjA0LDExNjAuOTEgMTUwOS4wOSw3NjIuNjQgMTExNy45NywxNDQwLjA4IDExODYuOTMsMTQ0MC4wOCAxNTc3Ljg3LDE0NDAuMDgiIC8+DQogIDxwb2x5Z29uIGZpbGw9IiMwMzkzRDAiIHBvaW50cz0iMTk3OC44LDc1Mi45NiAxODQ2LjIsNTIzLjMgMTM4Ni42OCw1MjMuMyAxNzQ5LjA0LDExNTAuOTEiIC8+DQo8L3N2Zz4=)](https://github.com/pjazdzyk/brent-dekker-solver)
+```markdown
+[![Brent-Dekker-Solver](https://img.shields.io/badge/Brent_Dekker%20solver-v1.1.4-13ADF3?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMi41bW0iIGhlaWdodD0iMTQuNW1tIiB2aWV3Qm94PSIwIDAgMjI1MCAxNDUwIj4NCiAgPHBvbHlnb24gZmlsbD0iIzUwN0QxNCIgcG9pbnRzPSIyMjQxLjAzLDE1Ljg4IDExMzYuMzgsMTUuODQgOTA1Ljg4LDQxNS4xIDIwMTAuNTMsNDE1LjA5IiAvPg0KICA8cG9seWdvbiBmaWxsPSIjNzFBQjIzIiBwb2ludHM9IjExMTYuMzgsMTUuODQgNjU1Ljk5LDE1Ljg0IDQ5NC4xNSwyOTYuMTcgNzI4LjM1LDY5NC44OCIgLz4NCiAgPHBvbHlnb24gZmlsbD0iIzhBQzkzNCIgcG9pbnRzPSI0ODQuMTUsMzA2LjE3IDI1NS4wNiw3MDIuOTYgMzg3LjY2LDkzMi42NCA4NDUuODMsOTMyLjYzIiAvPg0KICA8cG9seWdvbiBmaWxsPSIjNThEMEZGIiBwb2ludHM9Ii03LjE3LDE0NDAuMDkgMTA5Ny45NywxNDQwLjA4IDEzMjguNDcsMTA0MC44MyAyMjMuMzIsMTA0MC44NSIgLz4NCiAgPHBvbHlnb24gZmlsbD0iIzEzQURGMyIgcG9pbnRzPSIxNzM5LjA0LDExNjAuOTEgMTUwOS4wOSw3NjIuNjQgMTExNy45NywxNDQwLjA4IDExODYuOTMsMTQ0MC4wOCAxNTc3Ljg3LDE0NDAuMDgiIC8+DQogIDxwb2x5Z29uIGZpbGw9IiMwMzkzRDAiIHBvaW50cz0iMTk3OC44LDc1Mi45NiAxODQ2LjIsNTIzLjMgMTM4Ni42OCw1MjMuMyAxNzQ5LjA0LDExNTAuOTEiIC8+DQo8L3N2Zz4=)](https://github.com/pjazdzyk/brent-dekker-solver)
+```
+
 ### REFERENCE SOURCE
 
 * [1] BRENT-DEKKER ITERATIVE SOLVER - MODIFIED ALGORITHM PROPOSED BY Zhengqiu Zhang / International Journal of
   Experimental Algorithms (IJEA), Volume (2) : Issue (1) : 2011
 
-## Acknowledgments
-* [Shields.io](https://img.shields.io)
-* [Badges 4 README.md](https://github.com/alexandresanlim/Badges4-README.md-Profile)
+### Acknowledgments
+I extend my heartfelt gratitude to the [Silesian University of Technology](https://www.polsl.pl/en/) for imparting invaluable knowledge to me.<br>
+Thanks to [Mathieu Soysal](https://github.com/MathieuSoysal) for his [Maven central publisher](https://github.com/MathieuSoysal/Java-maven-library-publisher). <br>
+Badges used in readme: [Shields.io](https://img.shields.io) and [Badges 4 README.md](https://github.com/alexandresanlim/Badges4-README.md-Profile).

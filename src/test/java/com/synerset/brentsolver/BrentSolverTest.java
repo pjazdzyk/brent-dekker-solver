@@ -9,6 +9,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.function.DoubleFunction;
+import java.util.function.DoubleUnaryOperator;
 import java.util.stream.Stream;
 
 class BrentSolverTest {
@@ -27,7 +28,7 @@ class BrentSolverTest {
     @DisplayName("should return root for simple linear function")
     void findRoot_givenSingleVariableFunction_returnsRoot() {
         // Arrange
-        DoubleFunction<Double> func = p -> (p + 10) / 20;
+        DoubleUnaryOperator func = p -> (p + 10) / 20;
         var expectedRoot = -10;
 
         // Act
@@ -41,7 +42,7 @@ class BrentSolverTest {
     @DisplayName("should return one of two roots within specified solution boundary")
     void findRoot_givenQuadraticFunction_returnRoot() {
         // Arrange
-        DoubleFunction<Double> quadraticFunction = x -> 2 * x * x + 5 * x - 3;
+        DoubleUnaryOperator quadraticFunction = x -> 2 * x * x + 5 * x - 3;
         var expectedFirstRoot = -3;
         var expectedSecondRoot = 0.5;
 
@@ -60,7 +61,7 @@ class BrentSolverTest {
     @DisplayName("should return root for nested log function for series of counterpart points which brakes brent-decker counterpart points condition")
     void findRoot_givenPolynomialFunction_returnRoot(double pointA, double pointB) {
         // Arrange
-        DoubleFunction<Double> func = p -> 93.3519196629417 - (-237300 * Math.log(0.001638 * p) / (1000 * Math.log(0.001638 * p) - 17269));
+        DoubleUnaryOperator func = p -> 93.3519196629417 - (-237300 * Math.log(0.001638 * p) / (1000 * Math.log(0.001638 * p) - 17269));
         var expectedRoot = 80000;
 
         //Act
@@ -85,7 +86,7 @@ class BrentSolverTest {
     void findRoot_givenAcosFunction_throwsSolverResultException() {
         // Arrange
         solver.setCounterpartPoints(10, 5);
-        DoubleFunction<Double> func = x -> Math.acos(x / 2);
+        DoubleUnaryOperator func = x -> Math.acos(x / 2);
 
         // Assert
         Assertions.assertThrows(BrentSolverException.class, () -> solver.calcForFunction(func));

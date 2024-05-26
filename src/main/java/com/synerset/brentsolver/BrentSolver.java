@@ -1,9 +1,8 @@
 package com.synerset.brentsolver;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.function.DoubleFunction;
+import java.util.function.DoubleUnaryOperator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * BRENT-DEKKER ITERATIVE SOLVER - MODIFIED ALGORITHM PROPOSED BY Zhengqiu Zhang / International Journal of Experimental<br>
@@ -37,7 +36,7 @@ public class BrentSolver {
     private double c, f_c;                                      // previous iteration point and f(c), initially = a
     private double s, f_s;                                      // new approximate value based on secant method or bisection method and f_s
     private int counter;
-    private DoubleFunction<Double> userFunction;                // tested function, to be provided by user
+    private DoubleUnaryOperator userFunction;                   // function to compute, to be provided by user
 
     // SOLVER SOLUTION CONTROL
     private boolean runFlag = true;
@@ -52,7 +51,7 @@ public class BrentSolver {
     // DIAGNOSTICS OUTPUT CONTROL
     private boolean showDiagnostics = false;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BrentSolver.class.getSimpleName());
+    private static final Logger LOGGER = Logger.getLogger(BrentSolver.class.getName());
 
     /**
      * Initializes solver instance with function output set as 0, with default name.
@@ -89,7 +88,7 @@ public class BrentSolver {
      *
      * @param userFunction tested function (use lambda expression or method reference)
      */
-    public BrentSolver(String id, DoubleFunction<Double> userFunction, int evalX2Divider, int evalXDivider) {
+    public BrentSolver(String id, DoubleUnaryOperator userFunction, int evalX2Divider, int evalXDivider) {
         this(id, evalX2Divider, evalXDivider);
         this.userFunction = userFunction;
     }
@@ -101,17 +100,23 @@ public class BrentSolver {
      * @return actual root value
      */
     public final double findRoot() {
-        if(showDiagnostics) LOGGER.info("-----[{}] CALCULATION IN PROGRESS-----", id);
+        if (showDiagnostics) {
+            LOGGER.log(Level.INFO, "CALCULATION IN PROGRESS: {}", id);
+        }
         // To check and set value b as being closer to the root
         checkSetAndSwapABPoints(a0, b0);
         // In case provided by user point "a" or "b" is actually a root
         if (Math.abs(f_b) < accuracy) {
-            if(showDiagnostics) LOGGER.info("CALCULATION COMPLETE. INITIAL VALUE IS A ROOT");
+            if (showDiagnostics) {
+                LOGGER.log(Level.INFO, "CALCULATION COMPLETE. Initial value is a root.");
+            }
             return b;
         }
         // If solver were stopped
         if (!runFlag) {
-            if(showDiagnostics) LOGGER.info("!!CALCULATION STOPPED!!");
+            if (showDiagnostics) {
+                LOGGER.log(Level.WARNING, "CALCULATION STOPPED: {}", id);
+            }
             return b;
         }
         // Checking if Brent AB condition is not met to launch automatic AB points evaluation procedure
@@ -125,11 +130,11 @@ public class BrentSolver {
         // If at this stage proper A-B condition is not achievable - an exception is thrown.
         if (initialABConditionIsNotMet()) {
             String errorMsg = id + ": EVALUATION PROCEDURE FAILED: f(a) i f(b) must have an opposite signs. Current values:"
-                    + String.format(" a = %.3f, b = %.3f,  f(a)= %.3f, f(b)=%.3f", a, b, f_a, f_b);
-            LOGGER.error(errorMsg);
+                              + String.format(" a = %.3f, b = %.3f,  f(a)= %.3f, f(b)=%.3f", a, b, f_a, f_b);
+            LOGGER.log(Level.SEVERE, errorMsg);
             throw new BrentSolverException(errorMsg);
         }
-        printSolverDiagnostics(id + ": INITIAL VALUES: ", "");
+        printSolverResultsDiagnostics(id + ": INITIAL VALUES: ", "");
 
         /*--------BEGINNING OF ITERATIVE LOOP--------*/
         while (runFlag) {
@@ -137,7 +142,7 @@ public class BrentSolver {
 
             // New additional condition proposed by Zhengqiu Zhang
             c = (a + b) / 2;
-            f_c = userFunction.apply(c);
+            f_c = userFunction.applyAsDouble(c);
 
             //Determining better interpolation: inverse quadratic or else - secant method
             if ((f_a != f_c) && (f_b != f_c))
@@ -153,8 +158,8 @@ public class BrentSolver {
                 c = tempS;
                 s = tempC;
             }
-            f_c = userFunction.apply(c);
-            f_s = userFunction.apply(s);
+            f_c = userFunction.applyAsDouble(c);
+            f_s = userFunction.applyAsDouble(s);
             if (f_c * f_s < 0) {
                 a = s;
                 b = c;
@@ -165,11 +170,11 @@ public class BrentSolver {
                     b = s;
                 }
             }
-            f_a = userFunction.apply(a);
-            f_b = userFunction.apply(b);
+            f_a = userFunction.applyAsDouble(a);
+            f_b = userFunction.applyAsDouble(b);
 
             // Calculating current difference after this iteration cycle
-            printSolverDiagnostics(id + ": ITERATION: " + counter + " ", "Diff= " + currentDifference);
+            printSolverResultsDiagnostics(id + ": ITERATION: " + counter + " ", "Diff= " + currentDifference);
             if (currentDifference < accuracy) {
                 runFlag = false;
             } else if (counter > iterationsLimit) {
@@ -185,7 +190,9 @@ public class BrentSolver {
         }
 
         // b is always closer to the root
-        if(showDiagnostics) LOGGER.info("-----[{}] CALCULATION FINISHED-----", id);
+        if (showDiagnostics) {
+            LOGGER.log(Level.INFO, "CALCULATIONS FINISHED: {}", id);
+        }
         return b;
     }
 
@@ -194,13 +201,13 @@ public class BrentSolver {
     }
 
     private void checkSetAndSwapABPoints(double pointA, double pointB) {
-        f_a = userFunction.apply(pointA);
-        f_b = userFunction.apply(pointB);
+        f_a = userFunction.applyAsDouble(pointA);
+        f_b = userFunction.applyAsDouble(pointB);
         if (Math.abs(f_a) < Math.abs(f_b)) {
             a = pointB;
             b = pointA;
-            f_a = userFunction.apply(a);
-            f_b = userFunction.apply(b);
+            f_a = userFunction.applyAsDouble(a);
+            f_b = userFunction.applyAsDouble(b);
         } else {
             a = pointA;
             b = pointB;
@@ -239,12 +246,12 @@ public class BrentSolver {
             f_x1 = f_b;
             //Point 2, creating second point from the b
             x2 = b / evalX2Divider;
-            f_x2 = userFunction.apply(x2);
+            f_x2 = userFunction.applyAsDouble(x2);
             //Point 3, searching for a negative value of -f_b. Further division is to get result as close to the root as possible.
             f_x = -f_b / (evalXDivider - i);
             x = linearInterpolationFromValue(x1, f_x1, x2, f_x2, f_x);
             // When x is determined - to check if it really gives negative value (it may not occur for strong non-linearity)
-            f_xExact = userFunction.apply(x);
+            f_xExact = userFunction.applyAsDouble(x);
             checkSetAndSwapABPoints(b, x);
             printEvaluationDiagnostics("STEP " + i + ":");
             if (f_xExact * f_x1 < 0)
@@ -298,7 +305,7 @@ public class BrentSolver {
      *
      * @param func tested function (use lambda expression or method reference)
      */
-    public void setFunction(DoubleFunction<Double> func) {
+    public void setFunction(DoubleUnaryOperator func) {
         this.userFunction = func;
         resetSolverRunFlags();
     }
@@ -309,7 +316,7 @@ public class BrentSolver {
      * @param func tested function (use lambda expression or method reference)
      * @return function root (Double)
      */
-    public double calcForFunction(DoubleFunction<Double> func) {
+    public double calcForFunction(DoubleUnaryOperator func) {
         setFunction(func);
         return findRoot();
     }
@@ -322,7 +329,7 @@ public class BrentSolver {
      * @param b0   second point
      * @return function root (Double)
      */
-    public double calcForFunction(DoubleFunction<Double> func, double a0, double b0) {
+    public double calcForFunction(DoubleUnaryOperator func, double a0, double b0) {
         setCounterpartPoints(a0, b0);
         return calcForFunction(func);
     }
@@ -341,11 +348,12 @@ public class BrentSolver {
     /**
      * Linear interpolation/extrapolation. Returns a function value f_x for provided argument of x, based on provided two points P1(x1,f_x1), P2(x2,f_x2).
      * Can be used for interpolation or extrapolation for linear functions.
-     * @param x1 first point x value
+     *
+     * @param x1   first point x value
      * @param f_x1 function value in x1
-     * @param x2 second point x value
+     * @param x2   second point x value
      * @param f_x2 function value in x2
-     * @param x external point x value
+     * @param x    external point x value
      * @return f_x value of function for argument x.
      */
     public static double linearInterpolation(double x1, double f_x1, double x2, double f_x2, double x) {
@@ -355,11 +363,12 @@ public class BrentSolver {
     /**
      * Linear interpolation/extrapolation. Returns a function argument x for provided argument value f_x, based on provided two points P1(x1,f_x1), P2(x2,f_x2).
      * Can be used for interpolation or extrapolation for linear functions.
-     * @param x1 first point x value
+     *
+     * @param x1   first point x value
      * @param f_x1 function value in x1
-     * @param x2 second point x value
+     * @param x2   second point x value
      * @param f_x2 function value in x2
-     * @param f_x function value for external point x
+     * @param f_x  function value for external point x
      * @return x external point x value
      */
     public static double linearInterpolationFromValue(double x1, double f_x1, double x2, double f_x2, double f_x) {
@@ -370,9 +379,10 @@ public class BrentSolver {
      * Inverse quadratic interpolation. Returns a function argument x for f_x = 0.0, based on three provided points P2(x2,f_x2), P1(x1,f_x1), PN(xn,f_xn)
      * It attempts to fit y-based parabola to intersect with axis X as potential function root. It is faster than secant method but more sensitive to initial guesses.
      * It should be used for points very close to the root.
-     * @param x2 second point x value
-     * @param x1 first point x value
-     * @param xn any other point x value
+     *
+     * @param x2   second point x value
+     * @param x1   first point x value
+     * @param xn   any other point x value
      * @param f_x2 function value in x2
      * @param f_x1 function value in x1
      * @param f_xn function value in xn
@@ -380,14 +390,15 @@ public class BrentSolver {
      */
     public static double inverseQuadraticInterpolation(double x2, double x1, double xn, double f_x2, double f_x1, double f_xn) {
         return x2 * f_x1 * f_xn / ((f_x2 - f_x1) * (f_x2 - f_xn))
-                + x1 * f_x2 * f_xn / ((f_x1 - f_x2) * (f_x1 - f_xn))
-                + xn * f_x2 * f_x1 / ((f_xn - f_x2) * (f_xn - f_x1));
+               + x1 * f_x2 * f_xn / ((f_x1 - f_x2) * (f_x1 - f_xn))
+               + xn * f_x2 * f_x1 / ((f_xn - f_x2) * (f_xn - f_x1));
     }
 
     /**
      * Secant method. Returns a function value for X-axis secant intersection between points P1(x1,f_x1) and P2(x2,f_x2).
-     * @param x2 second point x value
-     * @param x1 first point x value
+     *
+     * @param x2   second point x value
+     * @param x1   first point x value
      * @param f_x2 function value in x2
      * @param f_x1 function value in x1
      * @return intersection point for f_x=0
@@ -399,13 +410,15 @@ public class BrentSolver {
     // DIAGNOSTIC OUTPUT
     private void printEvaluationDiagnostics(String titleMsg) {
         if (showDiagnostics) {
-            LOGGER.info(String.format(titleMsg + " \t EVAL VALUES:" + String.format("a = %.3f, b = %.3f, f(a)= %.3f, f(b)=%.3f", a, b, f_a, f_b)));
+            String formattedMsg = String.format("%s\t EVAL VALUES: a = %.3f, b = %.3f, f(a)= %.3f, f(b)=%.3f", titleMsg, a, b, f_a, f_b);
+            LOGGER.log(Level.INFO, formattedMsg);
         }
     }
 
-    private void printSolverDiagnostics(String titleMsg, String endMsg) {
+    private void printSolverResultsDiagnostics(String titleMsg, String endMsg) {
         if (showDiagnostics) {
-            LOGGER.info(String.format(titleMsg + "s= %.5f, a= %.5f, f(a)= %.5f, b= %.5f, f(b)= %.5f, c= %.5f, f(c)= %.5f \t" + endMsg,  s, a, f_a, b, f_b, c, f_c));
+            String formattedMsg = String.format("%s\t s= %.5f, a= %.5f, f(a)= %.5f, b= %.5f, f(b)= %.5f, c= %.5f, f(c)= %.5f \t %s", titleMsg, s, a, f_a, b, f_b, c, f_c, endMsg);
+            LOGGER.log(Level.INFO, formattedMsg);
         }
     }
 
@@ -414,12 +427,12 @@ public class BrentSolver {
     /**
      * Method for obtaining quick and single result for a provided function and expected result range.
      *
-     * @param func provided eqn = 0 as an lambda expression: value -> f(value)
+     * @param func   provided eqn = 0 as an lambda expression: value -> f(value)
      * @param rangeA first point of the expected result range
      * @param rangeB second point of the expected result range
      * @return calculated root
      */
-    public static double ofFunction(DoubleFunction<Double> func, double rangeA, double rangeB) {
+    public static double ofFunction(DoubleUnaryOperator func, double rangeA, double rangeB) {
         BrentSolver solver = new BrentSolver();
         return solver.calcForFunction(func, rangeA, rangeB);
     }

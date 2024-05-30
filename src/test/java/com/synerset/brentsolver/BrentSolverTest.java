@@ -8,20 +8,17 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.function.DoubleFunction;
 import java.util.function.DoubleUnaryOperator;
 import java.util.stream.Stream;
 
 class BrentSolverTest {
 
-    private double solver_accuracy;
     private BrentSolver solver;
 
     @BeforeEach
     void setUp() {
-        solver = new BrentSolver("Test-SOLVER");
-        solver_accuracy = solver.getAccuracy();
-        solver.setShowDiagnostics(true);
+        solver = BrentSolver.of("Test-SOLVER");
+        solver.showDebugLogs(true);
     }
 
     @Test
@@ -32,10 +29,10 @@ class BrentSolverTest {
         var expectedRoot = -10;
 
         // Act
-        var actualRoot = solver.calcForFunction(func);
+        var actualRoot = solver.findRoot(func);
 
         // Assert
-        Assertions.assertEquals(expectedRoot, actualRoot, solver_accuracy);
+        Assertions.assertEquals(expectedRoot, actualRoot, 1E-10);
     }
 
     @Test
@@ -47,13 +44,13 @@ class BrentSolverTest {
         var expectedSecondRoot = 0.5;
 
         // Act
-        var actualFirstRoot = solver.calcForFunction(quadraticFunction);
+        var actualFirstRoot = solver.findRoot(quadraticFunction);
         solver.setCounterpartPoints(-1, 2);
-        var actualSecondRoot = solver.calcForFunction(quadraticFunction);
+        var actualSecondRoot = solver.findRoot(quadraticFunction);
 
         // Assert
-        Assertions.assertEquals(expectedFirstRoot, actualFirstRoot, solver_accuracy);
-        Assertions.assertEquals(expectedSecondRoot, actualSecondRoot, solver_accuracy);
+        Assertions.assertEquals(expectedFirstRoot, actualFirstRoot, 1E-10);
+        Assertions.assertEquals(expectedSecondRoot, actualSecondRoot, 1E-10);
     }
 
     @ParameterizedTest
@@ -65,10 +62,10 @@ class BrentSolverTest {
         var expectedRoot = 80000;
 
         //Act
-        var actualRoot = solver.calcForFunction(func, pointA, pointB);
+        var actualRoot = solver.findRoot(func, pointA, pointB);
 
         //Assert
-        Assertions.assertEquals(actualRoot, expectedRoot, solver_accuracy);
+        Assertions.assertEquals(actualRoot, expectedRoot, 1E-9);
     }
 
     static Stream<Arguments> polyTestInlineData() {
@@ -89,7 +86,7 @@ class BrentSolverTest {
         DoubleUnaryOperator func = x -> Math.acos(x / 2);
 
         // Assert
-        Assertions.assertThrows(BrentSolverException.class, () -> solver.calcForFunction(func));
+        Assertions.assertThrows(BrentSolverException.class, () -> solver.findRoot(func));
     }
 
 }

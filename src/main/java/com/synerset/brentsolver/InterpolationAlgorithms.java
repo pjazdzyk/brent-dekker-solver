@@ -2,6 +2,10 @@ package com.synerset.brentsolver;
 
 public class InterpolationAlgorithms {
 
+    private InterpolationAlgorithms() {
+        throw new IllegalStateException("Utility class");
+    }
+
     // INTERPOLATION ALGORITHMS
 
     /**

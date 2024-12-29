@@ -52,6 +52,7 @@ public class BrentSolver {
     private int evalDividerX2Value;
 
     private boolean showDiagnostics;
+    private boolean showSummary;
 
     private static final Logger LOGGER = Logger.getLogger(BrentSolver.class.getName());
 
@@ -60,6 +61,13 @@ public class BrentSolver {
      */
     public BrentSolver() {
         this(BrentSolverDefaults.DEF_NAME, x -> 0, BrentSolverDefaults.DEF_A0, BrentSolverDefaults.DEF_B0);
+    }
+
+    /**
+     * Initializes solver instance with function output set as 0, with specified name
+     */
+    public BrentSolver(String name) {
+        this(name, x -> 0, BrentSolverDefaults.DEF_A0, BrentSolverDefaults.DEF_B0);
     }
 
     /**
@@ -94,13 +102,10 @@ public class BrentSolver {
      * @return actual root value meeting accuracy criteria
      */
     public double findRoot() {
+        long startTime = System.nanoTime();
+
         // Initializing Solver input variables, checking counterpart points conditions
         initializeAndCheckConditions();
-
-        if (!runFlag) {
-            log("CALCULATION COMPLETE. Initial value is a root: {0}.", b);
-            return b;
-        }
 
         /*--------BEGINNING OF ITERATIVE LOOP--------*/
         log("Starting calculations....");
@@ -167,10 +172,17 @@ public class BrentSolver {
             /*-----------END OF ITERATIVE LOOP-----------*/
         }
 
+        long endTime = System.nanoTime();
+        long durationNano = endTime - startTime;
+        double durationMillis = durationNano / 1_000_000.0;
+        double durationSeconds = durationNano / 1_000_000_000.0;
+
         // b is always closer to the root
-        log("CALCULATIONS COMPLETE: Root found: [{0}] in {1} iterations.", String.valueOf(b), counter);
+        logSummary("CALCULATIONS COMPLETE: Root found: [{0}] in {1} iterations. Completed in: {2} millis or {3} seconds. Target accuracy: {4}.",
+                String.valueOf(b), counter, durationMillis, durationSeconds, String.valueOf(accuracy));
 
         return b;
+
     }
 
     /**
@@ -391,6 +403,15 @@ public class BrentSolver {
         this.showDiagnostics = showDebugLogs;
     }
 
+    /**
+     * Sets solver calculations summary. (true = show output, false = no output).
+     *
+     * @param showSummaryLogs true = on, false = off
+     */
+    public void showSummaryLogs(boolean showSummaryLogs) {
+        this.showSummary = showSummaryLogs;
+    }
+
     // Solution state requirements
 
     private boolean initialABConditionIsNotMet() {
@@ -398,7 +419,7 @@ public class BrentSolver {
     }
 
     private boolean accuracyRequirementIsMet() {
-        return Math.abs(f_b) < accuracy;
+        return Math.abs(f_b) <= accuracy;
     }
 
     private void checkSetAndSwapABPoints(double pointA, double pointB) {
@@ -462,6 +483,10 @@ public class BrentSolver {
 
             logCurrentSolutionStatus("STEP " + i + ":");
 
+            if(accuracyRequirementIsMet()){
+                return;
+            }
+
             if (f_xExact * f_x1 < 0)
                 break;
         }
@@ -476,6 +501,12 @@ public class BrentSolver {
     private void log(Level level, String msg, Object... msgParams) {
         if (showDiagnostics) {
             LOGGER.log(level, String.format("[%s] - %s", name, msg), msgParams);
+        }
+    }
+
+    private void logSummary(String msg, Object... msgParams) {
+        if (showSummary || showDiagnostics) {
+            LOGGER.log(Level.INFO, String.format("[%s] - %s", name, msg), msgParams);
         }
     }
 
